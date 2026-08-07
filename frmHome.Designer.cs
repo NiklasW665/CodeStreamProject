@@ -28,18 +28,57 @@
         /// </summary>
         private void InitializeComponent()
         {
+            lblWelcome = new Label();
+            lblPlaylists = new Label();
+            lstPlaylists = new ListBox();
             SuspendLayout();
+            // 
+            // lblWelcome
+            // 
+            lblWelcome.AutoSize = true;
+            lblWelcome.Location = new Point(224, 37);
+            lblWelcome.Name = "lblWelcome";
+            lblWelcome.Size = new Size(106, 15);
+            lblWelcome.TabIndex = 0;
+            lblWelcome.Text = "Welcome Message";
+            // 
+            // lblPlaylists
+            // 
+            lblPlaylists.AutoSize = true;
+            lblPlaylists.Location = new Point(235, 77);
+            lblPlaylists.Name = "lblPlaylists";
+            lblPlaylists.Size = new Size(79, 15);
+            lblPlaylists.TabIndex = 1;
+            lblPlaylists.Text = "Your Playlists:";
+            // 
+            // lstPlaylists
+            // 
+            lstPlaylists.FormattingEnabled = true;
+            lstPlaylists.Location = new Point(113, 95);
+            lstPlaylists.Name = "lstPlaylists";
+            lstPlaylists.Size = new Size(348, 139);
+            lstPlaylists.TabIndex = 2;
+            lstPlaylists.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             // 
             // frmHome
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(560, 270);
+            Controls.Add(lstPlaylists);
+            Controls.Add(lblPlaylists);
+            Controls.Add(lblWelcome);
+            Margin = new Padding(2);
             Name = "frmHome";
             Text = "Home";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label lblWelcome;
+        private Label lblPlaylists;
+        private ListBox lstPlaylists;
     }
 }

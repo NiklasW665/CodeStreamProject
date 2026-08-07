@@ -10,9 +10,17 @@ namespace CodeStream20
 {
     public partial class frmHome : Form
     {
-        public frmHome()
+        private string username;
+        public frmHome(string username)
         {
             InitializeComponent();
+            this.username = username;
+            lblWelcome.Text = "Welcome back " + username + "!";
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

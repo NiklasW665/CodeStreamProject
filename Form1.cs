@@ -7,6 +7,9 @@ namespace CodeStream20
             InitializeComponent();
             //Video comment
         }
+        
+
+        
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -24,6 +27,7 @@ namespace CodeStream20
                 //declare variables
                 string username;
                 string password;
+                string matchedUsername = "";
                 bool found = false;
 
                 //Read the file
@@ -35,7 +39,7 @@ namespace CodeStream20
                     if (username == txtUsername.Text && password == txtPassword.Text)
                     {
                         found = true;
-
+                        matchedUsername = username;
                     }
                 }
 
@@ -45,7 +49,7 @@ namespace CodeStream20
                 //Check if login succeeded
                 if (found)
                 {
-                    frmHome home = new frmHome();
+                    frmHome home = new frmHome(matchedUsername);
                     home.ShowDialog();
 
                 }
@@ -58,13 +62,6 @@ namespace CodeStream20
             {
                 MessageBox.Show("file not found " + ex.Message);
             }
-
-
-
-
-
-
-
         }
 
         private void btnRegister_Click(object sender, EventArgs e)
