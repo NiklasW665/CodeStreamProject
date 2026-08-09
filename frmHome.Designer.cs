@@ -221,9 +221,9 @@
             lblCaption2.AutoSize = true;
             lblCaption2.Location = new Point(3, 28);
             lblCaption2.Name = "lblCaption2";
-            lblCaption2.Size = new Size(150, 28);
+            lblCaption2.Size = new Size(190, 56);
             lblCaption2.TabIndex = 1;
-            lblCaption2.Text = "Heavy Rotation";
+            lblCaption2.Text = "Average Songs per Playlist";
             // 
             // pnlTracks
             // 

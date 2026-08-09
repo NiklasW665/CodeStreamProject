@@ -200,13 +200,17 @@ namespace CodeStream20
                             "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                //STAT3:
-                string topArtist = "N/A"; //NB!! fix this 
+                //STAT3:Average songs per playlist
+                double averageSongs = 0; 
+                if( totalPlaylists>0)
+                {
+                    averageSongs = Convert.ToDouble(totalTracks) / totalPlaylists;
+                }
 
                 //Display the results in their respective labels
                 lblTotalplaylists.Text = totalPlaylists.ToString();
                 lblTrackCount.Text = totalTracks.ToString();
-                lblTopArtist.Text = topArtist;
+                lblTopArtist.Text = averageSongs.ToString("0.0"); //"0.0" to display 1 decimal
             }
             catch(Exception ex) // Catch for the first Try
             {
