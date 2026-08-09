@@ -1,3 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
 namespace CodeStream20
 {
     public partial class frmLogin : Form
@@ -5,13 +13,8 @@ namespace CodeStream20
         public frmLogin()
         {
             InitializeComponent();
-            //Video comment
-            //Home page commit
         }
         
-
-        
-
         private void btnLogin_Click(object sender, EventArgs e)
         {
             if (txtUsername.Text == "" || txtPassword.Text == "")
