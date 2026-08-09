@@ -26,11 +26,11 @@ namespace CodeStream20
             //the is for the user icons for each user
             picUserIcon.Cursor = Cursors.Hand;// change icon
             picUserIcon.Click += PicUserIcon_Click; // let user click and change icon
-            
+
             LoadUserIcon(username); // load user icon
             LoadPlaylist(username); // load their playlist
-
-           //user name label under icon
+            LoadStats(); //T:Loads the stats part
+                         //user name label under icon
             lblUser.Text = username;
         }
 
@@ -42,7 +42,7 @@ namespace CodeStream20
                 ofd.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp";
                 ofd.Title = "Select a Profile Picture";
 
-                if(ofd.ShowDialog() == DialogResult.OK)
+                if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
@@ -57,11 +57,11 @@ namespace CodeStream20
                         LoadUserIcon(username);
                     } catch (Exception ex)
                     {
-                        MessageBox.Show("Could not save profile picture: "+ ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Could not save profile picture: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
-            
+
         }
 
         //find user icons
@@ -71,7 +71,7 @@ namespace CodeStream20
             for (int i = 0; i < extensions.Length; i++)
             {
                 string candidate = Path.Combine(userIconFolder, path + extensions[i]);
-                if (File.Exists(candidate)) { 
+                if (File.Exists(candidate)) {
                     return candidate;
                 }
             }
@@ -85,9 +85,9 @@ namespace CodeStream20
             {
                 string existingPath = FindIconPath(username);
 
-                if(existingPath != null)
+                if (existingPath != null)
                 {
-                    using(FileStream stream = new FileStream(existingPath, FileMode.Open, FileAccess.Read))
+                    using (FileStream stream = new FileStream(existingPath, FileMode.Open, FileAccess.Read))
                     {
                         image = new Bitmap(stream);
                     }
@@ -109,12 +109,12 @@ namespace CodeStream20
                         g.DrawImage(image, 0, 0, diameter, diameter);
                     }
                 }
-                
+
                 picUserIcon.Image = circularImage;
 
                 picUserIcon.Width = diameter;
-                
-                
+
+
             }
             catch (Exception ex)
             {
@@ -141,7 +141,7 @@ namespace CodeStream20
             }
         }
 
-        private void EnsureFolderExits(string folderPath) 
+        private void EnsureFolderExits(string folderPath)
         {
             try
             {
@@ -150,9 +150,9 @@ namespace CodeStream20
                     Directory.CreateDirectory(folderPath);
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                MessageBox.Show("Could not create folder: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                MessageBox.Show("Could not create folder: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -166,5 +166,60 @@ namespace CodeStream20
         {
 
         }
+        //Write the LoadStats method
+        private void LoadStats()
+        {
+            //Use a try Catch to wrap the whole method for any unexpected errors
+            try 
+            {
+                string[] playlistFiles = Directory.GetFiles(playlistFolder, "*.txt");
+                //Stat1: Total Playlist
+                int totalPlaylists = playlistFiles.Length; // Use .Length to count the number of playlists
+                int totalTracks = 0; // this counter value starts at 0 and will accumulate as the number of playlists are counted
+                //STAT2:Use a for loop to go through every playlist 
+                for (int i = 0; i< playlistFiles.Length; i++)
+                {
+                    //use a try catch inside the for loop so that the program can cstch any individual problematic files and proceed with the rest
+                    try
+                    {
+                        using(StreamReader reader = new StreamReader(playlistFiles[i]))
+                        {
+                            string line; // Declare a variable that will store the lines as they are read
+                            while((line = reader.ReadLine()) !=null) // use a while loop to read line by line
+                            {
+                                if(!string.IsNullOrWhiteSpace(line)) //check if the line is empty
+                                {
+                                    totalTracks++; // we must increase the total as we go
+                                }
+                            }
+                        }
+                    }
+                    catch(Exception ex) //Catch an individual problem file
+                    {
+                        MessageBox.Show("Error reading playlist file" + playlistFiles[i] + ":" + ex.Message,
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                //STAT3:Average songs per playlist
+                double averageSongs = 0; 
+                if( totalPlaylists>0)
+                {
+                    averageSongs = Convert.ToDouble(totalTracks) / totalPlaylists;
+                }
+
+                //Display the results in their respective labels
+                lblTotalplaylists.Text = totalPlaylists.ToString();
+                lblTrackCount.Text = totalTracks.ToString();
+                lblTopArtist.Text = averageSongs.ToString("0.0"); //"0.0" to display 1 decimal
+            }
+            catch(Exception ex) // Catch for the first Try
+            {
+                MessageBox.Show("Could not load stats: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        
+
+
+
     }
 }
