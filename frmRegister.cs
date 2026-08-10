@@ -30,16 +30,19 @@ namespace CodeStream20
 
             try
             {
+                // Check for duplicate username
                 if (UserExists(usersFilePath, username))
                 {
                     MessageBox.Show("Username is taken. Please try another");
                     return;
                 }
 
+                // Save user 
                 SaveUser(usersFilePath, username, password);
 
                 MessageBox.Show("Account created successfully! Please log in.");
 
+                // Redirect to login
                 frmLogin LoginForm = new frmLogin();
                 LoginForm.Show();
                 this.Hide();
@@ -51,6 +54,7 @@ namespace CodeStream20
             }
         }
 
+        // VOID METHOD: Returns true if user exists
         private bool UserExists(string filePath, string username)
         {
             if (!File.Exists(filePath))
@@ -67,14 +71,15 @@ namespace CodeStream20
                     string[] parts = line.Split(',');
                     if (parts.Length > 1 && parts[0].Equals(username, StringComparison.OrdinalIgnoreCase))
                     {
-                        return true;
+                        return true; //match found
                     }
                 }
             }
 
-            return false;
+            return false; //match not found
         }
 
+        // VOID METHOD: Save user data to file
         private void SaveUser(string filePath, string username, string password)
         {
             using (StreamWriter writer = new StreamWriter(filePath, true))
