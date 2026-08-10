@@ -10,9 +10,19 @@ namespace CodeStream20
 {
     public partial class frmPlaylist : Form
     {
+        public string? SelectedPlaylist { get; }
+        public string PlaylistPath { get; }
+
         public frmPlaylist()
         {
             InitializeComponent();
+        }
+
+        public frmPlaylist(string? selectedPlaylist, string playlistPath)
+        {
+            InitializeComponent();
+            SelectedPlaylist = selectedPlaylist;
+            PlaylistPath = playlistPath;
         }
 
         private void lblPlaylistTitle_Click(object sender, EventArgs e)
@@ -51,6 +61,13 @@ namespace CodeStream20
                     MessageBoxIcon.Error
                 );
             }
+        }
+
+        private void frmPlaylist_Load(object sender, EventArgs e)
+        {
+            this.BackColor = ColorTranslator.FromHtml("#000424");
+            this.ForeColor = Color.White;
+            //LoadPlaylistData();
         }
     }
 }

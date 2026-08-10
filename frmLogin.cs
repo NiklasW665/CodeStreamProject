@@ -14,7 +14,7 @@ namespace CodeStream20
         {
             InitializeComponent();
         }
-        
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
             if (txtUsername.Text == "" || txtPassword.Text == "")
@@ -72,6 +72,16 @@ namespace CodeStream20
         {
             frmRegister register = new frmRegister();
             register.ShowDialog();
+        }
+
+        private void frmLogin_Load(object sender, EventArgs e)
+        {
+            this.BackColor = ColorTranslator.FromHtml("#000424");
+            this.ForeColor = Color.White;
+            btnRegister.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnRegister.ForeColor = Color.White;
+            btnLogin.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            //btnLogin.ForeColor = Color.White;
         }
     }
 }

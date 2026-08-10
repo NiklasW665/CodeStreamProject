@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ListViewItem listViewItem1 = new ListViewItem("");
+            ListViewItem listViewItem2 = new ListViewItem("");
             lblWelcome = new Label();
             lblPlaylists = new Label();
-            lstPlaylists = new ListBox();
             picUserIcon = new PictureBox();
             lblUser = new Label();
             grpStats = new GroupBox();
@@ -49,6 +50,9 @@
             flpPanel3 = new FlowLayoutPanel();
             lblTrackCount = new Label();
             lblCaption3 = new Label();
+            btnCreatePlaylist = new Button();
+            btnAddPlaylist = new Button();
+            lstPlaylists = new ListView();
             ((System.ComponentModel.ISupportInitialize)picUserIcon).BeginInit();
             grpStats.SuspendLayout();
             flpStats.SuspendLayout();
@@ -65,7 +69,7 @@
             // 
             lblWelcome.AutoSize = true;
             lblWelcome.Font = new Font("Segoe UI Black", 14F);
-            lblWelcome.Location = new Point(173, 30);
+            lblWelcome.Location = new Point(251, 30);
             lblWelcome.Name = "lblWelcome";
             lblWelcome.Size = new Size(231, 32);
             lblWelcome.TabIndex = 0;
@@ -75,22 +79,11 @@
             // 
             lblPlaylists.AutoSize = true;
             lblPlaylists.Font = new Font("Segoe UI Black", 12F);
-            lblPlaylists.Location = new Point(236, 85);
+            lblPlaylists.Location = new Point(314, 85);
             lblPlaylists.Name = "lblPlaylists";
             lblPlaylists.Size = new Size(153, 28);
             lblPlaylists.TabIndex = 1;
             lblPlaylists.Text = "Your Playlists:";
-            // 
-            // lstPlaylists
-            // 
-            lstPlaylists.Font = new Font("Segoe UI", 11F);
-            lstPlaylists.FormattingEnabled = true;
-            lstPlaylists.Location = new Point(129, 127);
-            lstPlaylists.Margin = new Padding(3, 4, 3, 4);
-            lstPlaylists.Name = "lstPlaylists";
-            lstPlaylists.Size = new Size(397, 179);
-            lstPlaylists.TabIndex = 2;
-            lstPlaylists.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             // 
             // picUserIcon
             // 
@@ -114,7 +107,7 @@
             // 
             grpStats.Controls.Add(flpStats);
             grpStats.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            grpStats.Location = new Point(30, 313);
+            grpStats.Location = new Point(30, 374);
             grpStats.Name = "grpStats";
             grpStats.Size = new Size(797, 191);
             grpStats.TabIndex = 5;
@@ -262,15 +255,48 @@
             lblCaption3.TabIndex = 1;
             lblCaption3.Text = "Total Tracks";
             // 
+            // btnCreatePlaylist
+            // 
+            btnCreatePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCreatePlaylist.Location = new Point(230, 330);
+            btnCreatePlaylist.Name = "btnCreatePlaylist";
+            btnCreatePlaylist.Size = new Size(163, 38);
+            btnCreatePlaylist.TabIndex = 6;
+            btnCreatePlaylist.Text = "Create Playlist";
+            btnCreatePlaylist.UseVisualStyleBackColor = true;
+            btnCreatePlaylist.Click += btnCreatePlaylist_Click;
+            // 
+            // btnAddPlaylist
+            // 
+            btnAddPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAddPlaylist.Location = new Point(414, 330);
+            btnAddPlaylist.Name = "btnAddPlaylist";
+            btnAddPlaylist.Size = new Size(163, 38);
+            btnAddPlaylist.TabIndex = 7;
+            btnAddPlaylist.Text = "Upload a Song";
+            btnAddPlaylist.UseVisualStyleBackColor = true;
+            btnAddPlaylist.Click += btnAddPlaylist_Click;
+            // 
+            // lstPlaylists
+            // 
+            lstPlaylists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
+            lstPlaylists.Location = new Point(207, 129);
+            lstPlaylists.Name = "lstPlaylists";
+            lstPlaylists.Size = new Size(397, 179);
+            lstPlaylists.TabIndex = 8;
+            lstPlaylists.UseCompatibleStateImageBehavior = false;
+            // 
             // frmHome
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(930, 516);
+            ClientSize = new Size(853, 593);
+            Controls.Add(lstPlaylists);
+            Controls.Add(btnAddPlaylist);
+            Controls.Add(btnCreatePlaylist);
             Controls.Add(grpStats);
             Controls.Add(lblUser);
             Controls.Add(picUserIcon);
-            Controls.Add(lstPlaylists);
             Controls.Add(lblPlaylists);
             Controls.Add(lblWelcome);
             Margin = new Padding(2, 3, 2, 3);
@@ -298,7 +324,6 @@
 
         private Label lblWelcome;
         private Label lblPlaylists;
-        private ListBox lstPlaylists;
         private PictureBox picUserIcon;
         private Label lblUser;
         private GroupBox grpStats;
@@ -317,5 +342,8 @@
         private Label lblCaption2;
         private Label lblTrackCount;
         private Label lblCaption3;
+        private Button btnCreatePlaylist;
+        private Button btnAddPlaylist;
+        private ListView lstPlaylists;
     }
 }
