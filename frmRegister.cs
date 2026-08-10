@@ -15,7 +15,7 @@ namespace CodeStream20
             InitializeComponent();
         }
 
-        private void btnRegister_Click(object sender, EventArgs e)
+        private void btnRegister_Click_1(object sender, EventArgs e)
         {
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Text.Trim();
@@ -83,17 +83,16 @@ namespace CodeStream20
             }
         }
 
-        private void btnRegister_Click_1(object sender, EventArgs e)
-        {
 
-        }
 
         private void frmRegister_Load(object sender, EventArgs e)
         {
             this.BackColor = ColorTranslator.FromHtml("#000424");
             this.ForeColor = Color.White;
-            btnRegister.BackColor = ColorTranslator.FromHtml("#1f1fa1"); 
+            btnRegister.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnRegister.ForeColor = Color.White;
         }
+
+        
     }
 }
