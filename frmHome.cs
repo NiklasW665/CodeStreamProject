@@ -257,6 +257,8 @@ namespace CodeStream20
             btnOpenPlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnOpenPlaylist.ForeColor = Color.White;
             lstPlaylists.BackColor = ColorTranslator.FromHtml("#B1E5F2");
+            grpStats.BackColor = ColorTranslator.FromHtml("#0000");
+            grpStats.ForeColor = Color.White;
         }
         //Write the LoadStats method
         private void LoadStats()

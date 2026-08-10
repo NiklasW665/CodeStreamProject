@@ -67,6 +67,8 @@ namespace CodeStream20
         {
             this.BackColor = ColorTranslator.FromHtml("#000424");
             this.ForeColor = Color.White;
+            btnUploadPlaylistArt.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnUploadPlaylistArt.ForeColor = Color.White;
             //LoadPlaylistData();
         }
     }
