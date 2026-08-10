@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewItem listViewItem1 = new ListViewItem("");
-            ListViewItem listViewItem2 = new ListViewItem("");
+            ListViewItem listViewItem3 = new ListViewItem("");
+            ListViewItem listViewItem4 = new ListViewItem("");
             lblWelcome = new Label();
             lblPlaylists = new Label();
             picUserIcon = new PictureBox();
@@ -53,6 +53,7 @@
             btnCreatePlaylist = new Button();
             btnAddPlaylist = new Button();
             lstPlaylists = new ListView();
+            btnOpenPlaylist = new Button();
             ((System.ComponentModel.ISupportInitialize)picUserIcon).BeginInit();
             grpStats.SuspendLayout();
             flpStats.SuspendLayout();
@@ -258,7 +259,7 @@
             // btnCreatePlaylist
             // 
             btnCreatePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCreatePlaylist.Location = new Point(230, 330);
+            btnCreatePlaylist.Location = new Point(153, 330);
             btnCreatePlaylist.Name = "btnCreatePlaylist";
             btnCreatePlaylist.Size = new Size(163, 38);
             btnCreatePlaylist.TabIndex = 6;
@@ -269,7 +270,7 @@
             // btnAddPlaylist
             // 
             btnAddPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAddPlaylist.Location = new Point(414, 330);
+            btnAddPlaylist.Location = new Point(337, 330);
             btnAddPlaylist.Name = "btnAddPlaylist";
             btnAddPlaylist.Size = new Size(163, 38);
             btnAddPlaylist.TabIndex = 7;
@@ -279,18 +280,30 @@
             // 
             // lstPlaylists
             // 
-            lstPlaylists.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
+            lstPlaylists.Items.AddRange(new ListViewItem[] { listViewItem3, listViewItem4 });
             lstPlaylists.Location = new Point(207, 129);
             lstPlaylists.Name = "lstPlaylists";
             lstPlaylists.Size = new Size(397, 179);
             lstPlaylists.TabIndex = 8;
             lstPlaylists.UseCompatibleStateImageBehavior = false;
             // 
+            // btnOpenPlaylist
+            // 
+            btnOpenPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnOpenPlaylist.Location = new Point(517, 330);
+            btnOpenPlaylist.Name = "btnOpenPlaylist";
+            btnOpenPlaylist.Size = new Size(163, 38);
+            btnOpenPlaylist.TabIndex = 9;
+            btnOpenPlaylist.Text = "Open Playlist";
+            btnOpenPlaylist.UseVisualStyleBackColor = true;
+            btnOpenPlaylist.Click += btnOpenPlaylist_Click;
+            // 
             // frmHome
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(853, 593);
+            Controls.Add(btnOpenPlaylist);
             Controls.Add(lstPlaylists);
             Controls.Add(btnAddPlaylist);
             Controls.Add(btnCreatePlaylist);
@@ -345,5 +358,6 @@
         private Button btnCreatePlaylist;
         private Button btnAddPlaylist;
         private ListView lstPlaylists;
+        private Button btnOpenPlaylist;
     }
 }

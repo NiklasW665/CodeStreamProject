@@ -31,6 +31,7 @@ namespace CodeStream20
             lstPlaylists.LargeImageList = playlistIconList;
             lstPlaylists.MultiSelect = true;
             lstPlaylists.HideSelection = false;
+            lstPlaylists.DoubleClick += lstPlaylists_DoubleClick;
 
             this.username = username;
             lblWelcome.Text = "Welcome back " + username + "!";
@@ -253,6 +254,8 @@ namespace CodeStream20
             btnCreatePlaylist.ForeColor = Color.White;
             btnAddPlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnAddPlaylist.ForeColor = Color.White;
+            btnOpenPlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnOpenPlaylist.ForeColor = Color.White;
             lstPlaylists.BackColor = ColorTranslator.FromHtml("#B1E5F2");
         }
         //Write the LoadStats method
@@ -332,7 +335,7 @@ namespace CodeStream20
                 }
                 using (StreamWriter writer = File.CreateText(playlistPath))
                 {
-                    
+
                 }
                 LoadPlaylist(username);
                 LoadStats();
@@ -346,7 +349,7 @@ namespace CodeStream20
 
         private void btnAddPlaylist_Click(object sender, EventArgs e)
         {
-            if(lstPlaylists.SelectedItems.Count == 0)
+            if (lstPlaylists.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Please select a playlist to add.", "No Playlist Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -381,9 +384,9 @@ namespace CodeStream20
                             using (StreamReader read = new StreamReader(path))
                             {
                                 string line;
-                                while((line = read.ReadLine()) != null)
+                                while ((line = read.ReadLine()) != null)
                                 {
-                                    if(line.Equals(songName, StringComparison.OrdinalIgnoreCase))
+                                    if (line.Equals(songName, StringComparison.OrdinalIgnoreCase))
                                     {
                                         exist = true;
                                         break;
@@ -396,18 +399,19 @@ namespace CodeStream20
                                 continue;
                             }
 
-                            using(StreamWriter write = new StreamWriter(path, true))
+                            using (StreamWriter write = new StreamWriter(path, true))
                             {
                                 write.WriteLine(songName);
                             }
                             addedCount++;
-                        } catch (Exception exInner)
+                        }
+                        catch (Exception exInner)
                         {
-                            MessageBox.Show("Could not add song to \"" + playlistName+"\": " + exInner.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Could not add song to \"" + playlistName + "\": " + exInner.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         index++;
                     }
-                  
+
                     string selectedPlaylist = lstPlaylists.SelectedItems[0].Text;
                     string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
                     File.Copy(ofd.FileName, destinationPath, true);
@@ -415,11 +419,17 @@ namespace CodeStream20
                     LoadStats();
                     MessageBox.Show("Playlist added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            } catch (Exception ex)
-            {
-                MessageBox.Show("An error has occured while adding the song:" + ex.Message + "Error"); 
             }
-            
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error has occured while adding the song:" + ex.Message + "Error");
+            }
+
+        }
+
+        private void btnOpenPlaylist_Click(object sender, EventArgs e)
+        {
+            openPlaylist();
         }
     }
 }
