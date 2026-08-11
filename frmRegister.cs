@@ -26,7 +26,7 @@ namespace CodeStream20
                 return;
             }
 
-            string usersFilePath = "user.txt";
+            string usersFilePath = "User.txt";
 
             try
             {
