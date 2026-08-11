@@ -34,6 +34,7 @@
             lblCreationDateValue = new Label();
             pBoxCoverArt = new PictureBox();
             btnUploadPlaylistArt = new Button();
+            btnBackToHome = new Button();
             ((System.ComponentModel.ISupportInitialize)pBoxCoverArt).BeginInit();
             SuspendLayout();
             // 
@@ -101,11 +102,22 @@
             btnUploadPlaylistArt.UseVisualStyleBackColor = true;
             btnUploadPlaylistArt.Click += btnUploadPlaylistArt_Click;
             // 
+            // btnBackToHome
+            // 
+            btnBackToHome.Location = new Point(749, 509);
+            btnBackToHome.Name = "btnBackToHome";
+            btnBackToHome.Size = new Size(125, 42);
+            btnBackToHome.TabIndex = 6;
+            btnBackToHome.Text = "<-Homepage";
+            btnBackToHome.UseVisualStyleBackColor = true;
+            btnBackToHome.Click += btnBackToHome_Click;
+            // 
             // frmPlaylist
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(914, 600);
+            Controls.Add(btnBackToHome);
             Controls.Add(btnUploadPlaylistArt);
             Controls.Add(pBoxCoverArt);
             Controls.Add(lblCreationDateValue);
@@ -129,5 +141,6 @@
         private Label lblCreationDateValue;
         private PictureBox pBoxCoverArt;
         private Button btnUploadPlaylistArt;
+        private Button btnBackToHome;
     }
 }
