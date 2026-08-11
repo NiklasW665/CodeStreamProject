@@ -166,12 +166,13 @@ namespace CodeStream20
         {
 
         }
-        //Write the LoadStats method
+        //Write the LoadStats method for the Stats
         private void LoadStats()
         {
             //Use a try Catch to wrap the whole method for any unexpected errors
             try 
             {
+                //Create an array which will go through a folder and searching for every file ending with .txt
                 string[] playlistFiles = Directory.GetFiles(playlistFolder, "*.txt");
                 //Stat1: Total Playlist
                 int totalPlaylists = playlistFiles.Length; // Use .Length to count the number of playlists
