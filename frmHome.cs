@@ -415,9 +415,9 @@ namespace CodeStream20
                         index++;
                     }
 
-                    string selectedPlaylist = lstPlaylists.SelectedItems[0].Text;
-                    string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
-                    File.Copy(ofd.FileName, destinationPath, true);
+                    //string selectedPlaylist = lstPlaylists.SelectedItems[0].Text;
+                    //string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
+                    //File.Copy(ofd.FileName, destinationPath, true);
                     LoadPlaylist(username);
                     LoadStats();
                     MessageBox.Show("Playlist added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
