@@ -40,9 +40,10 @@
             // 
             lblUsername.AutoSize = true;
             lblUsername.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsername.Location = new Point(249, 110);
+            lblUsername.Location = new Point(199, 88);
+            lblUsername.Margin = new Padding(2, 0, 2, 0);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(107, 25);
+            lblUsername.Size = new Size(88, 20);
             lblUsername.TabIndex = 0;
             lblUsername.Text = "Username :";
             // 
@@ -50,32 +51,36 @@
             // 
             lblPassword.AutoSize = true;
             lblPassword.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPassword.Location = new Point(249, 171);
+            lblPassword.Location = new Point(199, 137);
+            lblPassword.Margin = new Padding(2, 0, 2, 0);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(102, 25);
+            lblPassword.Size = new Size(84, 20);
             lblPassword.TabIndex = 1;
             lblPassword.Text = "Password :";
             // 
             // txtUsername
             // 
-            txtUsername.Location = new Point(355, 110);
+            txtUsername.Location = new Point(284, 88);
+            txtUsername.Margin = new Padding(2);
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(150, 31);
+            txtUsername.Size = new Size(139, 27);
             txtUsername.TabIndex = 2;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(351, 171);
+            txtPassword.Location = new Point(284, 134);
+            txtPassword.Margin = new Padding(2);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(150, 31);
+            txtPassword.Size = new Size(139, 27);
             txtPassword.TabIndex = 3;
             // 
             // btnLogin
             // 
             btnLogin.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLogin.Location = new Point(315, 253);
+            btnLogin.Location = new Point(262, 193);
+            btnLogin.Margin = new Padding(2);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(112, 34);
+            btnLogin.Size = new Size(100, 35);
             btnLogin.TabIndex = 4;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = true;
@@ -84,9 +89,10 @@
             // btnRegister
             // 
             btnRegister.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnRegister.Location = new Point(315, 319);
+            btnRegister.Location = new Point(262, 246);
+            btnRegister.Margin = new Padding(2);
             btnRegister.Name = "btnRegister";
-            btnRegister.Size = new Size(112, 34);
+            btnRegister.Size = new Size(100, 35);
             btnRegister.TabIndex = 5;
             btnRegister.Text = "Register";
             btnRegister.UseVisualStyleBackColor = true;
@@ -94,17 +100,19 @@
             // 
             // frmLogin
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(640, 360);
             Controls.Add(btnRegister);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtUsername);
             Controls.Add(lblPassword);
             Controls.Add(lblUsername);
+            Margin = new Padding(2);
             Name = "frmLogin";
             Text = "Login";
+            Load += frmLogin_Load;
             ResumeLayout(false);
             PerformLayout();
         }
