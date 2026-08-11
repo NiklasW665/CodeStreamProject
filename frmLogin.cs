@@ -26,7 +26,7 @@ namespace CodeStream20
             {
                 //Open the file
                 StreamReader inputFile;
-                inputFile = new StreamReader("User.txt");
+                inputFile = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "User.txt"));
 
                 //declare variables
                 string username;

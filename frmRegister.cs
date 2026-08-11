@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace CodeStream20
 {
@@ -14,7 +15,7 @@ namespace CodeStream20
         {
             InitializeComponent();
         }
-
+        
         private void btnRegister_Click_1(object sender, EventArgs e)
         {
             string username = txtUsername.Text.Trim();
@@ -26,7 +27,7 @@ namespace CodeStream20
                 return;
             }
 
-            string usersFilePath = "user.txt";
+            string usersFilePath = "User.txt";
 
             try
             {
@@ -40,10 +41,8 @@ namespace CodeStream20
 
                 MessageBox.Show("Account created successfully! Please log in.");
 
-                frmLogin LoginForm = new frmLogin();
-                LoginForm.Show();
-                this.Hide();
-                LoginForm.FormClosed += (s, args) => this.Close();
+           
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -77,10 +76,14 @@ namespace CodeStream20
 
         private void SaveUser(string filePath, string username, string password)
         {
-            using (StreamWriter writer = new StreamWriter(filePath, true))
-            {
-                writer.WriteLine(username + "," + password);
-            }
+            StreamWriter inputFile;
+            inputFile = new StreamWriter(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "User.txt"));
+            
+            inputFile.WriteLine(username);
+            inputFile.WriteLine(password);
+            inputFile.Close();
+            
+            
         }
 
 
