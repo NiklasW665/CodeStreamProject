@@ -65,11 +65,11 @@ namespace CodeStream20
 
             using (StreamReader reader = new StreamReader(filePath))
             {
-                string? line;
-                while ((line = reader.ReadLine()) != null)
+                string? existingUsername;
+                while ((existingUsername = reader.ReadLine()) != null)
                 {
-                    string[] parts = line.Split(',');
-                    if (parts.Length > 1 && parts[0].Equals(username, StringComparison.OrdinalIgnoreCase))
+                    string? existingPassword = reader.ReadLine();
+                    if (existingUsername.Equals(username, StringComparison.OrdinalIgnoreCase))
                     {
                         return true; //match found
                     }
@@ -84,13 +84,9 @@ namespace CodeStream20
         {
             using (StreamWriter writer = new StreamWriter(filePath, true))
             {
-                writer.WriteLine(username + "," + password);
+                writer.WriteLine(username);
+                writer.WriteLine(password);
             }
-        }
-
-        private void btnRegister_Click_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
