@@ -38,40 +38,46 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(181, 118);
+            label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label1.Location = new Point(158, 88);
             label1.Name = "label1";
-            label1.Size = new Size(78, 20);
+            label1.Size = new Size(67, 15);
             label1.TabIndex = 0;
             label1.Text = "Username:";
             // 
             // txtUsername
             // 
-            txtUsername.Location = new Point(265, 111);
+            txtUsername.Location = new Point(232, 86);
+            txtUsername.Margin = new Padding(3, 2, 3, 2);
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(125, 27);
+            txtUsername.Size = new Size(120, 23);
             txtUsername.TabIndex = 1;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(181, 178);
+            label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label2.Location = new Point(163, 134);
             label2.Name = "label2";
-            label2.Size = new Size(73, 20);
+            label2.Size = new Size(62, 15);
             label2.TabIndex = 2;
             label2.Text = "Password:";
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(265, 171);
+            txtPassword.Location = new Point(232, 131);
+            txtPassword.Margin = new Padding(3, 2, 3, 2);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(125, 27);
+            txtPassword.Size = new Size(120, 23);
             txtPassword.TabIndex = 3;
             // 
             // btnRegister
             // 
-            btnRegister.Location = new Point(279, 230);
+            btnRegister.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnRegister.Location = new Point(232, 172);
+            btnRegister.Margin = new Padding(3, 2, 3, 2);
             btnRegister.Name = "btnRegister";
-            btnRegister.Size = new Size(94, 29);
+            btnRegister.Size = new Size(94, 27);
             btnRegister.TabIndex = 4;
             btnRegister.Text = "Register";
             btnRegister.UseVisualStyleBackColor = true;
@@ -79,17 +85,18 @@
             // 
             // frmRegister
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(640, 360);
+            ClientSize = new Size(560, 270);
             Controls.Add(btnRegister);
             Controls.Add(txtPassword);
             Controls.Add(label2);
             Controls.Add(txtUsername);
             Controls.Add(label1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "frmRegister";
             Text = "Register";
+            Load += frmRegister_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -101,5 +108,6 @@
         private Label label2;
         private TextBox txtPassword;
         private Button btnRegister;
+
     }
 }
