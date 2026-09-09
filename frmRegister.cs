@@ -6,11 +6,13 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.Json;
 
 namespace CodeStream20
 {
     public partial class frmRegister : Form
     {
+        private readonly string usersFilePath = "Users.json";
         public frmRegister()
         {
             InitializeComponent();
@@ -27,19 +29,19 @@ namespace CodeStream20
                 return;
             }
 
-            string usersFilePath = "User.txt";
-
             try
             {
+                List<User> users = LoadUsers();
                 // Check for duplicate username
-                if (UserExists(usersFilePath, username))
+                if (UserExists(users, username))
                 {
                     MessageBox.Show("Username is taken. Please try another");
                     return;
                 }
 
                 // Save user 
-                SaveUser(usersFilePath, username, password);
+                users.Add(new User(username, password));
+                SaveUser(users);
 
                 MessageBox.Show("Account created successfully! Please log in.");
 
@@ -51,43 +53,38 @@ namespace CodeStream20
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred" + ex.Message);
+                MessageBox.Show("An error occurred " + ex.Message);
             }
         }
 
         // VOID METHOD: Returns true if user exists
-        private bool UserExists(string filePath, string username)
+        private bool UserExists(List<User> users, string username)
         {
-            if (!File.Exists(filePath))
+            foreach (User u in users)
             {
-                using (StreamWriter sw = File.CreateText(filePath)) { }
-                return false;
-            }
-
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                string? existingUsername;
-                while ((existingUsername = reader.ReadLine()) != null)
+                if (u.Username.Equals(username, StringComparison.OrdinalIgnoreCase))
                 {
-                    string? existingPassword = reader.ReadLine();
-                    if (existingUsername.Equals(username, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true; //match found
-                    }
+                    return true;
                 }
             }
-
-            return false; //match not found
+            return false;
         }
 
-        // VOID METHOD: Save user data to file
-        private void SaveUser(string filePath, string username, string password)
+        private List<User> LoadUsers()
         {
-            using (StreamWriter writer = new StreamWriter(filePath, true))
+            if (!File.Exists(usersFilePath))
             {
-                writer.WriteLine(username);
-                writer.WriteLine(password);
+                return new List<User>();
             }
+            string json = File.ReadAllText(usersFilePath);
+            return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
+        }
+        
+        // VOID METHOD: Save user data to file
+        private void SaveUser(List<User> users)
+        {
+            string json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(usersFilePath, json);
         }
 
         private void frmRegister_Load(object sender, EventArgs e)
