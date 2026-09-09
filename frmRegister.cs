@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -31,18 +31,23 @@ namespace CodeStream20
 
             try
             {
+                // Check for duplicate username
                 if (UserExists(usersFilePath, username))
                 {
                     MessageBox.Show("Username is taken. Please try another");
                     return;
                 }
 
+                // Save user 
                 SaveUser(usersFilePath, username, password);
 
                 MessageBox.Show("Account created successfully! Please log in.");
 
-           
-                this.Close();
+                // Redirect to login
+                frmLogin LoginForm = new frmLogin();
+                LoginForm.Show();
+                this.Hide();
+                LoginForm.FormClosed += (s, args) => this.Close();
             }
             catch (Exception ex)
             {
@@ -50,6 +55,7 @@ namespace CodeStream20
             }
         }
 
+        // VOID METHOD: Returns true if user exists
         private bool UserExists(string filePath, string username)
         {
             if (!File.Exists(filePath))
@@ -60,33 +66,29 @@ namespace CodeStream20
 
             using (StreamReader reader = new StreamReader(filePath))
             {
-                string? line;
-                while ((line = reader.ReadLine()) != null)
+                string? existingUsername;
+                while ((existingUsername = reader.ReadLine()) != null)
                 {
-                    string[] parts = line.Split(',');
-                    if (parts.Length > 1 && parts[0].Equals(username, StringComparison.OrdinalIgnoreCase))
+                    string? existingPassword = reader.ReadLine();
+                    if (existingUsername.Equals(username, StringComparison.OrdinalIgnoreCase))
                     {
-                        return true;
+                        return true; //match found
                     }
                 }
             }
 
-            return false;
+            return false; //match not found
         }
 
+        // VOID METHOD: Save user data to file
         private void SaveUser(string filePath, string username, string password)
         {
-            StreamWriter inputFile;
-            inputFile = new StreamWriter(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "User.txt"));
-            
-            inputFile.WriteLine(username);
-            inputFile.WriteLine(password);
-            inputFile.Close();
-            
-            
+            using (StreamWriter writer = new StreamWriter(filePath, true))
+            {
+                writer.WriteLine(username);
+                writer.WriteLine(password);
+            }
         }
-
-
 
         private void frmRegister_Load(object sender, EventArgs e)
         {
@@ -95,7 +97,5 @@ namespace CodeStream20
             btnRegister.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnRegister.ForeColor = Color.White;
         }
-
-        
     }
 }
