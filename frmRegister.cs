@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,11 +6,13 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.Json;
 
 namespace CodeStream20
 {
     public partial class frmRegister : Form
     {
+        private readonly string usersFilePath = "Users.json";
         public frmRegister()
         {
             InitializeComponent();
@@ -27,66 +29,63 @@ namespace CodeStream20
                 return;
             }
 
-            string usersFilePath = "User.txt";
-
             try
             {
-                if (UserExists(usersFilePath, username))
+                List<User> users = LoadUsers();
+                // Check for duplicate username
+                if (UserExists(users, username))
                 {
                     MessageBox.Show("Username is taken. Please try another");
                     return;
                 }
 
-                SaveUser(usersFilePath, username, password);
+                // Save user 
+                users.Add(new User(username, password));
+                SaveUser(users);
 
                 MessageBox.Show("Account created successfully! Please log in.");
 
-           
-                this.Close();
+                // Redirect to login
+                frmLogin LoginForm = new frmLogin();
+                LoginForm.Show();
+                this.Hide();
+                LoginForm.FormClosed += (s, args) => this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred" + ex.Message);
+                MessageBox.Show("An error occurred " + ex.Message);
             }
         }
 
-        private bool UserExists(string filePath, string username)
+        // VOID METHOD: Returns true if user exists
+        private bool UserExists(List<User> users, string username)
         {
-            if (!File.Exists(filePath))
+            foreach (User u in users)
             {
-                using (StreamWriter sw = File.CreateText(filePath)) { }
-                return false;
-            }
-
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                string? line;
-                while ((line = reader.ReadLine()) != null)
+                if (u.Username.Equals(username, StringComparison.OrdinalIgnoreCase))
                 {
-                    string[] parts = line.Split(',');
-                    if (parts.Length > 1 && parts[0].Equals(username, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
-
             return false;
         }
 
-        private void SaveUser(string filePath, string username, string password)
+        private List<User> LoadUsers()
         {
-            StreamWriter inputFile;
-            inputFile = new StreamWriter(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "User.txt"));
-            
-            inputFile.WriteLine(username);
-            inputFile.WriteLine(password);
-            inputFile.Close();
-            
-            
+            if (!File.Exists(usersFilePath))
+            {
+                return new List<User>();
+            }
+            string json = File.ReadAllText(usersFilePath);
+            return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
         }
-
-
+        
+        // VOID METHOD: Save user data to file
+        private void SaveUser(List<User> users)
+        {
+            string json = JsonSerializer.Serialize(users, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(usersFilePath, json);
+        }
 
         private void frmRegister_Load(object sender, EventArgs e)
         {
@@ -95,7 +94,5 @@ namespace CodeStream20
             btnRegister.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnRegister.ForeColor = Color.White;
         }
-
-        
     }
 }
