@@ -29,7 +29,7 @@ namespace CodeStream20
             try
             {
 
-                string json = File.ReadAllText("User.json"); //using json file to store user data
+                string json = File.ReadAllText("Users.json"); //using json file to store user data
                 List<User> users = JsonSerializer.Deserialize<List<User>>(json); //taking the data from the json file and storing it in a variable of type List<User>
 
                 foreach (User user in users) //looping through the list of users and checking if the username and password entered by the user matches the data stored in the json file)
