@@ -16,6 +16,8 @@ namespace CodeStream20
         public string Genre { get; set; }
         public TimeSpan Duration { get; set; }
         public string FilePath { get; set; }
+        //songs inside the playlist
+        public List<string> Songs { get; set; } 
 
         //constructor to easily insantiate a new playlist object
         public Playlist(string title, string artist, string genre, TimeSpan duration, string filePath)
@@ -25,6 +27,14 @@ namespace CodeStream20
             Genre = genre;
             Duration = duration;
             FilePath = filePath;
+            //create a new empty list of songs
+            Songs = new List<string>();
+        }
+
+        //Method to add a song to the playlist
+        public void AddSong(string songTitle)
+        {
+            Songs.Add(songTitle);
         }
     }
 }

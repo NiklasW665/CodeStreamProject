@@ -19,6 +19,8 @@ namespace CodeStream20
         //for the listview
         private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
         private ImageList playlistIconList = new ImageList();
+        //list that stores All playlists created in the program.
+        private List<Playlist> allPlaylists = new List<Playlist>();
         public frmHome(string username)
         {
             InitializeComponent();
@@ -156,6 +158,8 @@ namespace CodeStream20
         {
             lstPlaylists.Items.Clear();
             playlistIconList.Images.Clear();
+            //reset the in-memory list
+            allPlaylists.Clear();
             //openPlaylist();
             try
             {
@@ -163,6 +167,20 @@ namespace CodeStream20
                 for (int i = 0; i < files.Length; i++)
                 {
                     string name = Path.GetFileNameWithoutExtension(files[i]);
+                    //Create a playlist object for each file**
+                    Playlist j = new Playlist(name, "Unknown Artist", "Unknown Genre", TimeSpan.Zero, "Unknown Path");
+
+                    //read songs from the file and add them to the playlist object**
+                    string[] lines = File.ReadAllLines(files[i]);
+                    foreach(string line in lines)
+                    {
+                        if(!string.IsNullOrWhiteSpace(line))
+                        {
+                            string songTitle = line.Split(',')[0];
+                            j.AddSong(songTitle);
+                        }
+                    }
+                    allPlaylists.Add(j);
                     string iconpath = PlaylistIcon(name);
                     Image coverImage;
                     try
@@ -260,58 +278,42 @@ namespace CodeStream20
             grpStats.BackColor = ColorTranslator.FromHtml("#0000");
             grpStats.ForeColor = Color.White;
         }
+
         //Write the LoadStats method for the Stats
         private void LoadStats()
         {
-            //Use a try Catch to wrap the whole method for any unexpected errors
             try
             {
-                //Create an array which will go through a folder and searching for every file ending with .txt
-                string[] playlistFiles = Directory.GetFiles(playlistFolder, "*.txt");
-                //Stat1: Total Playlist
-                int totalPlaylists = playlistFiles.Length; // Use .Length to count the number of playlists
-                int totalTracks = 0; // this counter value starts at 0 and will accumulate as the number of playlists are counted
-                //STAT2:Use a for loop to go through every playlist 
-                for (int i = 0; i < playlistFiles.Length; i++)
+                //total playlists that exists
+                int totalPlaylists = allPlaylists.Count;
+
+                //Count how many songs are in all the playlists combined
+                int totalTracks = 0;
+                foreach (Playlist i in allPlaylists)
                 {
-                    //use a try catch inside the for loop so that the program can cstch any individual problematic files and proceed with the rest
-                    try
-                    {
-                        using (StreamReader reader = new StreamReader(playlistFiles[i]))
-                        {
-                            string line; // Declare a variable that will store the lines as they are read
-                            while ((line = reader.ReadLine()) != null) // use a while loop to read line by line
-                            {
-                                if (!string.IsNullOrWhiteSpace(line)) //check if the line is empty
-                                {
-                                    totalTracks++; // we must increase the total as we go
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex) //Catch an individual problem file
-                    {
-                        MessageBox.Show("Error reading playlist file" + playlistFiles[i] + ":" + ex.Message,
-                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    totalTracks += i.Songs.Count;
                 }
-                //STAT3:Average songs per playlist
+
+                //Calculate the average songs per playlist
                 double averageSongs = 0;
-                if (totalPlaylists > 0)
+                if (totalPlaylists > 0)// this is to avoid the divideby zero error
                 {
                     averageSongs = Convert.ToDouble(totalTracks) / totalPlaylists;
                 }
 
-                //Display the results in their respective labels
+                //Display the results
                 lblTotalplaylists.Text = totalPlaylists.ToString();
                 lblTrackCount.Text = totalTracks.ToString();
-                lblTopArtist.Text = averageSongs.ToString("0.0"); //"0.0" to display 1 decimal
+                lblTopArtist.Text = averageSongs.ToString("0.0");
             }
-            catch (Exception ex) // Catch for the first Try
+            catch (Exception ex)
             {
                 MessageBox.Show("Could not load stats: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+            
+            
+           
 
         private void btnCreatePlaylist_Click(object sender, EventArgs e)
         {
@@ -407,6 +409,15 @@ namespace CodeStream20
                                 write.WriteLine(songName);
                             }
                             addedCount++;
+                            //Update playlist object in memory **
+                           foreach(Playlist j in allPlaylists)
+                            {
+                                if (j.Title == playlistName)
+                                {
+                                    j.AddSong(songTitle);
+                                    break;
+                                }
+                            }
                         }
                         catch (Exception exInner)
                         {
