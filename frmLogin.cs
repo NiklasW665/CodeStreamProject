@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Forms;
+using System.IO;
 
 namespace CodeStream20
 {
@@ -19,52 +21,35 @@ namespace CodeStream20
         {
             if (txtUsername.Text == "" || txtPassword.Text == "")
             {
-                MessageBox.Show("Please enter both Username and Password");
+                MessageBox.Show("Please enter both Username and Password"); //checking if the username and password fields are empty and displaying a message to the user
+                return; //returning from the method if the fields are empty.Which method is being returned from? The btnLogin_Click method is being returned from, which is the event handler for the login button click event. This means that if the username or password fields are empty, the method will exit and no further code will be executed.
             }
 
+            //try catch block when no file is found
             try
             {
-                //Open the file
-                StreamReader inputFile;
-                inputFile = new StreamReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "User.txt"));
 
-                //declare variables
-                string username;
-                string password;
-                string matchedUsername = "";
-                bool found = false;
+                string json = File.ReadAllText("Users.json"); //using json file to store user data
+                List<User> users = JsonSerializer.Deserialize<List<User>>(json); //taking the data from the json file and storing it in a variable of type List<User>
 
-                //Read the file
-                while ((username = inputFile.ReadLine()) != null)
+                foreach (User user in users) //looping through the list of users and checking if the username and password entered by the user matches the data stored in the json file)
                 {
-                    password = inputFile.ReadLine();
-
-                    //Compare
-                    if (username == txtUsername.Text && password == txtPassword.Text)
+                    if (user.Username == txtUsername.Text &&
+                    user.Password == txtPassword.Text) //Checking if the username and password entered by the user matches the data stored in the json file 
                     {
-                        found = true;
-                        matchedUsername = username;
+                        frmHome home = new frmHome(user.Username); //if the username and password matches, then the user is logged in and the home form is displayed)
+                        home.Show();
+                        this.Hide();
+                        return;
                     }
                 }
-
-                //Close the file
-                inputFile.Close();
-
-                //Check if login succeeded
-                if (found)
-                {
-                    frmHome home = new frmHome(matchedUsername);
-                    home.ShowDialog();
-
-                }
-                else
-                {
-                    MessageBox.Show("Invalid username or password. ");
-                }
+                MessageBox.Show("Invalid username and password, please register");
+                return; //if the username and password does not match, then a message is displayed to the user
             }
-            catch (Exception ex)
+            catch (FileNotFoundException) //catching the exception when the file is not found and displaying a message to the user
             {
-                MessageBox.Show("file not found " + ex.Message);
+                MessageBox.Show("No user accounts found. Please register first.");
+                return;
             }
         }
 
