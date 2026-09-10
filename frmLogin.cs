@@ -29,15 +29,16 @@ namespace CodeStream20
             try
             {
 
-                string json = File.ReadAllText("Users.json"); //using json file to store user data
+                string json = File.ReadAllText(User.UsersFilePath); //using json file to store user data
                 List<User> users = JsonSerializer.Deserialize<List<User>>(json); //taking the data from the json file and storing it in a variable of type List<User>
 
                 foreach (User user in users) //looping through the list of users and checking if the username and password entered by the user matches the data stored in the json file)
                 {
-                    if (user.Username == txtUsername.Text &&
+                    if (user.Username.Equals(txtUsername.Text, StringComparison.OrdinalIgnoreCase) &&
                     user.Password == txtPassword.Text) //Checking if the username and password entered by the user matches the data stored in the json file 
                     {
                         frmHome home = new frmHome(user.Username); //if the username and password matches, then the user is logged in and the home form is displayed)
+                        home.FormClosed += (s, args) => this.Close(); //when Home closes, close this hidden login form too, so the app actually exits
                         home.Show();
                         this.Hide();
                         return;
