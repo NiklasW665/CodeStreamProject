@@ -12,7 +12,7 @@ namespace CodeStream20
 {
     public partial class frmRegister : Form
     {
-        private readonly string usersFilePath = "User.json";
+        private readonly string usersFilePath = User.UsersFilePath;
         public frmRegister()
         {
             InitializeComponent();
@@ -46,10 +46,7 @@ namespace CodeStream20
                 MessageBox.Show("Account created successfully! Please log in.");
 
                 // Redirect to login
-                frmLogin LoginForm = new frmLogin();
-                LoginForm.Show();
-                this.Hide();
-                LoginForm.FormClosed += (s, args) => this.Close();
+                this.Close();
             }
             catch (Exception ex)
             {

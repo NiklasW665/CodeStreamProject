@@ -12,6 +12,8 @@ namespace CodeStream20
     {
         public string? SelectedPlaylist { get; }
         public string PlaylistPath { get; }
+        private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
+        //Puts the PlayListIcon folder in the application startup path
 
         public frmPlaylist()
         {
@@ -50,6 +52,17 @@ namespace CodeStream20
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     pBoxCoverArt.Image = Image.FromFile(openFileDialog.FileName);
+                    if (!string.IsNullOrEmpty(SelectedPlaylist))
+                    {
+                        // Remove old art in any format
+                        foreach (string oldExt in new[] { ".png", ".jpg", ".jpeg", ".bmp" })
+                        {
+                            string old = Path.Combine(playlistIconFolder, SelectedPlaylist + oldExt);
+                            if (File.Exists(old)) File.Delete(old);
+                        }
+                        string savePath = Path.Combine(playlistIconFolder, SelectedPlaylist + Path.GetExtension(openFileDialog.FileName));
+                        File.Copy(openFileDialog.FileName, savePath, true);
+                    }
                 }
             }
             catch (Exception ex)
@@ -72,6 +85,20 @@ namespace CodeStream20
             btnBackToHome.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnBackToHome.ForeColor = Color.White;
             //LoadPlaylistData();
+            if (!string.IsNullOrEmpty(SelectedPlaylist))
+            {
+                string[] exts = { ".png", ".jpg", ".jpeg", ".bmp" };
+                foreach (string ext in exts)
+                {
+                    string iconPath = Path.Combine(playlistIconFolder, SelectedPlaylist + ext);
+                    //getting the icon from the playlist icon folder
+                    if (File.Exists(iconPath))
+                    {
+                        pBoxCoverArt.Image = Image.FromFile(iconPath);
+                        break;
+                    }
+                }
+            }
         }
 
         private void btnBackToHome_Click(object sender, EventArgs e)

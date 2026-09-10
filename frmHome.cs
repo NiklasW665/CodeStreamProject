@@ -18,22 +18,38 @@ namespace CodeStream20
 
         //for the listview
         private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
+<<<<<<< HEAD
         private ImageList playlistIconList = new ImageList();
         //list that stores All playlists created in the program.
         private List<Playlist> allPlaylists = new List<Playlist>();
+=======
+>>>>>>> 5bcae2ebe759bca9a4a443366645288c314115cb
         public frmHome(string username)
         {
             InitializeComponent();
             EnsureFolderExits(playlistFolder);
             EnsureFolderExits(userIconFolder);
             EnsureFolderExits(playlistIconFolder);
-            playlistIconList.ImageSize = new Size(64, 64);
-            playlistIconList.ColorDepth = ColorDepth.Depth32Bit;
-            lstPlaylists.View = View.LargeIcon;
-            lstPlaylists.LargeImageList = playlistIconList;
-            lstPlaylists.MultiSelect = true;
-            lstPlaylists.HideSelection = false;
-            lstPlaylists.DoubleClick += lstPlaylists_DoubleClick;
+            DataGridViewImageColumn imgCol = new DataGridViewImageColumn();
+            imgCol.HeaderText = "Cover";
+            imgCol.Name = "CoverArt";
+            imgCol.Width = 70;
+            imgCol.ImageLayout = DataGridViewImageCellLayout.Zoom;
+            dgvPlaylists.Columns.Add(imgCol);
+
+            DataGridViewTextBoxColumn nameCol = new DataGridViewTextBoxColumn();
+            nameCol.HeaderText = "Playlist Name";
+            nameCol.Name = "PlaylistName";
+            nameCol.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvPlaylists.Columns.Add(nameCol);
+
+            dgvPlaylists.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPlaylists.MultiSelect = true;
+            dgvPlaylists.ReadOnly = true;
+            dgvPlaylists.RowHeadersVisible = false;
+            dgvPlaylists.AllowUserToAddRows = false;
+            dgvPlaylists.RowTemplate.Height = 70;
+            dgvPlaylists.DoubleClick += dgvPlaylists_DoubleClick;
 
             this.username = username;
             lblWelcome.Text = "Welcome back " + username + "!";
@@ -156,10 +172,14 @@ namespace CodeStream20
         //this functions load the playlist of the current user for the playslist form
         public void LoadPlaylist(string username)
         {
+<<<<<<< HEAD
             lstPlaylists.Items.Clear();
             playlistIconList.Images.Clear();
             //reset the in-memory list
             allPlaylists.Clear();
+=======
+            dgvPlaylists.Rows.Clear();
+>>>>>>> 5bcae2ebe759bca9a4a443366645288c314115cb
             //openPlaylist();
             try
             {
@@ -192,9 +212,7 @@ namespace CodeStream20
                     {
                         coverImage = SystemIcons.Application.ToBitmap();
                     }
-                    playlistIconList.Images.Add(name, coverImage);
-                    ListViewItem item = new ListViewItem(name, name);
-                    lstPlaylists.Items.Add(item);
+                    dgvPlaylists.Rows.Add(coverImage, name);
                 }
             }
             catch (Exception ex)
@@ -206,14 +224,14 @@ namespace CodeStream20
         //this function opens the playlist form when the user double clicks on a playlist in the listbox
         private void openPlaylist()
         {
-            if (lstPlaylists.SelectedItems.Count == null)
+            if (dgvPlaylists.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Please select a playlist to open.", "No Playlist Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             try
             {
-                string selectedPlaylist = lstPlaylists.SelectedItems[0].Text;
+                string selectedPlaylist = dgvPlaylists.SelectedRows[0].Cells["PlaylistName"].Value.ToString();
                 string playlistPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
                 if (!File.Exists(playlistPath))
                 {
@@ -238,7 +256,7 @@ namespace CodeStream20
             }
         }
 
-        private void lstPlaylists_DoubleClick(object sender, EventArgs e)
+        private void dgvPlaylists_DoubleClick(object sender, EventArgs e)
         {
             openPlaylist();
         }
@@ -274,7 +292,8 @@ namespace CodeStream20
             btnAddPlaylist.ForeColor = Color.White;
             btnOpenPlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnOpenPlaylist.ForeColor = Color.White;
-            lstPlaylists.BackColor = ColorTranslator.FromHtml("#B1E5F2");
+            dgvPlaylists.BackgroundColor = ColorTranslator.FromHtml("#B1E5F2");
+            dgvPlaylists.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#B1E5F2");
             grpStats.BackColor = ColorTranslator.FromHtml("#0000");
             grpStats.ForeColor = Color.White;
         }
@@ -354,7 +373,7 @@ namespace CodeStream20
 
         private void btnAddPlaylist_Click(object sender, EventArgs e)
         {
-            if (lstPlaylists.SelectedItems.Count == 0)
+            if (dgvPlaylists.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Please select a playlist to add.", "No Playlist Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -373,9 +392,9 @@ namespace CodeStream20
                     string songName = songTitle + ", " + ofd.FileName;
                     int addedCount = 0;
                     int index = 0;
-                    while (index < lstPlaylists.SelectedItems.Count)
+                    while (index < dgvPlaylists.SelectedRows.Count)
                     {
-                        string playlistName = lstPlaylists.SelectedItems[index].Text;
+                        string playlistName = dgvPlaylists.SelectedRows[index].Cells["PlaylistName"].Value.ToString();
                         string path = Path.Combine(playlistFolder, playlistName + ".txt");
                         try
                         {
@@ -426,9 +445,15 @@ namespace CodeStream20
                         index++;
                     }
 
+<<<<<<< HEAD
                     //string selectedPlaylist = lstPlaylists.SelectedItems[0].Text;
                     //string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
                     //File.Copy(ofd.FileName, destinationPath, true);
+=======
+                    string selectedPlaylist = dgvPlaylists.SelectedRows[0].Cells["PlaylistName"].Value.ToString();
+                    string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
+                    
+>>>>>>> 5bcae2ebe759bca9a4a443366645288c314115cb
                     LoadPlaylist(username);
                     LoadStats();
                     MessageBox.Show("Playlist added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
