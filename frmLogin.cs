@@ -28,12 +28,8 @@ namespace CodeStream20
             //try catch block when no file is found
             try
             {
-
-<<<<<<< HEAD
                 string json = File.ReadAllText("User.json"); //using json file to store user data
-=======
                 string json = File.ReadAllText(User.UsersFilePath); //using json file to store user data
->>>>>>> 5bcae2ebe759bca9a4a443366645288c314115cb
                 List<User> users = JsonSerializer.Deserialize<List<User>>(json); //taking the data from the json file and storing it in a variable of type List<User>
 
                 foreach (User user in users) //looping through the list of users and checking if the username and password entered by the user matches the data stored in the json file)

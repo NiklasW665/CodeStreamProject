@@ -18,12 +18,9 @@ namespace CodeStream20
 
         //for the listview
         private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
-<<<<<<< HEAD
         private ImageList playlistIconList = new ImageList();
         //list that stores All playlists created in the program.
         private List<Playlist> allPlaylists = new List<Playlist>();
-=======
->>>>>>> 5bcae2ebe759bca9a4a443366645288c314115cb
         public frmHome(string username)
         {
             InitializeComponent();
@@ -172,14 +169,11 @@ namespace CodeStream20
         //this functions load the playlist of the current user for the playslist form
         public void LoadPlaylist(string username)
         {
-<<<<<<< HEAD
             lstPlaylists.Items.Clear();
             playlistIconList.Images.Clear();
             //reset the in-memory list
             allPlaylists.Clear();
-=======
             dgvPlaylists.Rows.Clear();
->>>>>>> 5bcae2ebe759bca9a4a443366645288c314115cb
             //openPlaylist();
             try
             {
@@ -445,15 +439,12 @@ namespace CodeStream20
                         index++;
                     }
 
-<<<<<<< HEAD
                     //string selectedPlaylist = lstPlaylists.SelectedItems[0].Text;
                     //string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
                     //File.Copy(ofd.FileName, destinationPath, true);
-=======
                     string selectedPlaylist = dgvPlaylists.SelectedRows[0].Cells["PlaylistName"].Value.ToString();
                     string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
                     
->>>>>>> 5bcae2ebe759bca9a4a443366645288c314115cb
                     LoadPlaylist(username);
                     LoadStats();
                     MessageBox.Show("Playlist added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
