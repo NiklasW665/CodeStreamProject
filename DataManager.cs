@@ -8,8 +8,11 @@ using System.Text.Json;
 
 namespace CodeStream20
 {
+    [Serializable]
     public class DataManager
     {
+        private static readonly string[] IconExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif", ".ico" };
+
         public static List<Playlist> SongLibrary { get; set; } = new List<Playlist>();
         public static List<Playlist> UserPlaylists { get; set; } = new List<Playlist>();
 
@@ -33,7 +36,7 @@ namespace CodeStream20
         //playlslist/shared/playlistname.json or playlist/username/playlistname.json
         //playlist objects (playlist + list<song>) serialized to json
         //create the correct folder structure for the playlists and shared playlists
-        public static string GetPlaylistFolder(string username, string playlistName, bool isShared)
+        public static string GetPlaylistFolder(string username, bool isShared)
         {
             string folderPath = isShared ? "Playlists/Shared" : $"Playlists/{username}";
             //Directory.CreateDirectory(folderPath); // Ensure the directory exists
@@ -49,64 +52,106 @@ namespace CodeStream20
                 // Handle the exception (e.g., log it, show a message to the user, etc.)
                 throw; // Rethrow the exception for now
             }
-            return Path.Combine(folderPath, $"{playlistName}.json");
-        }
+            return folderPath;
+        } // this function only returns the path to the playlist file, not the folder. If you want to get the folder path, you can modify it to return just the folder without appending the playlist name and ".json".
+        public static string GetPlaylistFilePath(Playlist playlist)
+        {
+            string folderPath = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
+            return Path.Combine(folderPath, $"{playlist.Title}.json");
+        }//this function return the excat.json file path
 
         //save a playlist to the correct folder structure
         public static void savePlaylist(Playlist playlist)
         {
-            string folder = GetPlaylistFolder(playlist.Owner, playlist.Title, playlist.IsShared);
-            string path = Path.Combine(folder, $"{playlist.Title}.json");
+            string path = GetPlaylistFilePath(playlist);
             string json = JsonSerializer.Serialize(playlist);// Serialize the playlist to JSON
             File.WriteAllText(path, json);// Save the playlist to the file
         }
 
-        //load a playlist from the correct folder structure
-        public static List<Playlist> loadUserPlaylists(string username, bool isShared)
+        public static void deletePlaylist(Playlist playlist)
         {
-            string folder = isShared ? "Playlists/Shared" : $"Playlists/{username}";
-            List<Playlist> playlists = new List<Playlist>();
-            string ownFolder = GetPlaylistFolder(username, folder, isShared);
-            string sharedFolder = GetPlaylistFolder(username, folder, isShared);
-            
-            loadPlaylistsFromFolder(ownFolder, playlists);
-            loadPlaylistsFromFolder(sharedFolder, playlists); 
-            
-            return playlists;
-        }
-
-        public static void deletePlaylist(string folder, Playlist playlist)
-        {
-            string nfolder = GetPlaylistFolder(playlist.Owner, folder, playlist.IsShared);
+            string folder = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
             string path = Path.Combine(folder, playlist.Title + ".json");
-            if(File.Exists(path))
+            if (File.Exists(path))
             {
                 File.Delete(path);
             }
+
+            for (int i = 0; i < IconExtensions.Length; i++)
+            {
+                string iconPath = Path.Combine(folder, playlist.Title + IconExtensions[i]);
+                if (File.Exists(iconPath))
+                {
+                    File.Delete(iconPath);
+                }
+            }
+        }
+
+        //load a playlist from the correct folder structure
+        public static List<Playlist> loadUserPlaylists(string username)
+        {
+            List<Playlist> playlists = new List<Playlist>();
+            string ownFolder = GetPlaylistFolder(username, false);
+            string sharedFolder = GetPlaylistFolder(username, true);
+
+            loadPlaylistsFromFolder(ownFolder, playlists);
+            loadPlaylistsFromFolder(sharedFolder, playlists);
+            UserPlaylists = playlists;
+            return playlists;
         }
         public static void loadPlaylistsFromFolder(string folderPath, List<Playlist> playlists)
         {
-            try
+            if (!Directory.Exists(folderPath))
             {
-                if (Directory.Exists(folderPath))
-                {
-                    string[] files = Directory.GetFiles(folderPath, "*.json");
-                    foreach (string file in files)
-                    {
-                        string json = File.ReadAllText(file);
-                        Playlist playlist = JsonSerializer.Deserialize<Playlist>(json);
-                        if (playlist != null)
-                        {
-                            playlists.Add(playlist);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex) 
-            { 
-                
+                Directory.CreateDirectory(folderPath);
             }
 
+            string[] files = Directory.GetFiles(folderPath, "*.json");
+            foreach (string file in files)
+            {
+                try
+                {
+                    string json = File.ReadAllText(file);
+                    Playlist? playlist = JsonSerializer.Deserialize<Playlist>(json);
+                    if (playlist != null)
+                    {
+                        playlists.Add(playlist);
+                    }
+                }
+                catch (Exception)
+                {
+                    return;
+                } 
+            }
+        }
+        // load cover art
+        //returns the path to the cover art if it exists, otherwise returns null
+        public static string? GetPlaylistIconPath(Playlist playlist)
+        {
+            // GetPlaylistFolder currently returns the playlist file path (folder + "<name>.json"),
+            // so take its directory as the folder to search for icons.
+            string folderPath = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
+            if (!Directory.Exists(folderPath))
+                return null;
+
+            foreach (var ext in IconExtensions)
+            {
+                string iconPath = Path.Combine(folderPath, playlist.Title + ext);
+                if (File.Exists(iconPath))
+                    return iconPath;
+            }
+
+            return null;
+        }
+        public static void SavePlaylistIcon(Playlist playlist, string iconFilePath)
+        {
+            string folderPath = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
+            string extension = Path.GetExtension(iconFilePath);
+            if (Array.Exists(IconExtensions, ext => ext.Equals(extension, StringComparison.OrdinalIgnoreCase)))
+            {
+                string destinationPath = Path.Combine(folderPath, playlist.Title + extension);
+                File.Copy(iconFilePath, destinationPath, true); // Overwrite if exists
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace CodeStream20
+﻿
+namespace CodeStream20
 {
     partial class frmHome
     {
@@ -20,12 +21,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             lblWelcome = new Label();
@@ -53,6 +48,10 @@
             btnOpenPlaylist = new Button();
             dgvPlaylists = new DataGridView();
             btnDeletePlaylist = new Button();
+            btnBrowsePlaylist = new Button();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label1 = new Label();
+            lblCaption4 = new Label();
             ((System.ComponentModel.ISupportInitialize)picUserIcon).BeginInit();
             grpStats.SuspendLayout();
             flpStats.SuspendLayout();
@@ -64,6 +63,7 @@
             pnlTracks.SuspendLayout();
             flpPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPlaylists).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // lblWelcome
@@ -120,6 +120,7 @@
             flpStats.Controls.Add(pnlTotalPlaylist);
             flpStats.Controls.Add(pnlHeavy);
             flpStats.Controls.Add(pnlTracks);
+            flpStats.Controls.Add(flowLayoutPanel1);
             flpStats.Dock = DockStyle.Fill;
             flpStats.Location = new Point(3, 30);
             flpStats.Name = "flpStats";
@@ -259,9 +260,9 @@
             // btnCreatePlaylist
             // 
             btnCreatePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCreatePlaylist.Location = new Point(129, 330);
+            btnCreatePlaylist.Location = new Point(24, 330);
             btnCreatePlaylist.Name = "btnCreatePlaylist";
-            btnCreatePlaylist.Size = new Size(144, 36);
+            btnCreatePlaylist.Size = new Size(163, 37);
             btnCreatePlaylist.TabIndex = 6;
             btnCreatePlaylist.Text = "Create Playlist";
             btnCreatePlaylist.UseVisualStyleBackColor = true;
@@ -270,9 +271,9 @@
             // btnUploadSong
             // 
             btnUploadSong.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnUploadSong.Location = new Point(286, 330);
+            btnUploadSong.Location = new Point(208, 330);
             btnUploadSong.Name = "btnUploadSong";
-            btnUploadSong.Size = new Size(142, 35);
+            btnUploadSong.Size = new Size(163, 37);
             btnUploadSong.TabIndex = 7;
             btnUploadSong.Text = "Upload a Song";
             btnUploadSong.UseVisualStyleBackColor = true;
@@ -281,9 +282,9 @@
             // btnOpenPlaylist
             // 
             btnOpenPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnOpenPlaylist.Location = new Point(434, 330);
+            btnOpenPlaylist.Location = new Point(392, 330);
             btnOpenPlaylist.Name = "btnOpenPlaylist";
-            btnOpenPlaylist.Size = new Size(133, 36);
+            btnOpenPlaylist.Size = new Size(163, 37);
             btnOpenPlaylist.TabIndex = 9;
             btnOpenPlaylist.Text = "Open Playlist";
             btnOpenPlaylist.UseVisualStyleBackColor = true;
@@ -292,29 +293,70 @@
             // dgvPlaylists
             // 
             dgvPlaylists.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPlaylists.Location = new Point(129, 129);
+            dgvPlaylists.Location = new Point(24, 129);
             dgvPlaylists.Margin = new Padding(3, 4, 3, 4);
             dgvPlaylists.Name = "dgvPlaylists";
             dgvPlaylists.RowHeadersWidth = 51;
-            dgvPlaylists.Size = new Size(580, 180);
+            dgvPlaylists.Size = new Size(880, 180);
             dgvPlaylists.TabIndex = 10;
             // 
             // btnDeletePlaylist
             // 
             btnDeletePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeletePlaylist.Location = new Point(573, 330);
+            btnDeletePlaylist.Location = new Point(576, 330);
             btnDeletePlaylist.Name = "btnDeletePlaylist";
-            btnDeletePlaylist.Size = new Size(136, 36);
+            btnDeletePlaylist.Size = new Size(163, 37);
             btnDeletePlaylist.TabIndex = 11;
             btnDeletePlaylist.Text = "Delete Playlist";
             btnDeletePlaylist.UseVisualStyleBackColor = true;
             btnDeletePlaylist.Click += btnDeletePlaylist_Click;
             // 
+            // btnBrowsePlaylist
+            // 
+            btnBrowsePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnBrowsePlaylist.Location = new Point(760, 330);
+            btnBrowsePlaylist.Name = "btnBrowsePlaylist";
+            btnBrowsePlaylist.Size = new Size(163, 37);
+            btnBrowsePlaylist.TabIndex = 12;
+            btnBrowsePlaylist.Text = "Browse for Playlist";
+            btnBrowsePlaylist.UseVisualStyleBackColor = true;
+            btnBrowsePlaylist.Click += btnBrowsePlaylist_Click;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(label1);
+            flowLayoutPanel1.Controls.Add(lblCaption4);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(621, 3);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(200, 100);
+            flowLayoutPanel1.TabIndex = 7;
+            flowLayoutPanel1.WrapContents = false;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(23, 28);
+            label1.TabIndex = 0;
+            label1.Text = "0";
+            // 
+            // lblCaption4
+            // 
+            lblCaption4.AutoSize = true;
+            lblCaption4.Location = new Point(3, 28);
+            lblCaption4.Name = "lblCaption4";
+            lblCaption4.Size = new Size(147, 28);
+            lblCaption4.TabIndex = 1;
+            lblCaption4.Text = "Largest Playlist";
+            // 
             // frmHome
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(853, 593);
+            ClientSize = new Size(953, 655);
+            Controls.Add(btnBrowsePlaylist);
             Controls.Add(btnDeletePlaylist);
             Controls.Add(dgvPlaylists);
             Controls.Add(btnOpenPlaylist);
@@ -343,9 +385,18 @@
             flpPanel3.ResumeLayout(false);
             flpPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPlaylists).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
 
         #endregion
 
@@ -374,5 +425,9 @@
         private Button btnOpenPlaylist;
         private DataGridView dgvPlaylists;
         private Button btnDeletePlaylist;
+        private Button btnBrowsePlaylist;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label label1;
+        private Label lblCaption4;
     }
 }

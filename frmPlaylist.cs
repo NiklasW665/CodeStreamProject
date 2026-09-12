@@ -16,10 +16,17 @@ namespace CodeStream20
         public string PlaylistPath { get; } = string.Empty;
         private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
         //Puts the PlayListIcon folder in the application startup path
-
+        private Playlist? currentPlaylist;
         public frmPlaylist()
         {
             InitializeComponent();
+        }
+        public frmPlaylist(Playlist playlist)
+        {
+            InitializeComponent();
+            currentPlaylist = playlist;
+            SelectedPlaylist = playlist.Title;
+            //PlaylistPath = playlist.FilePath;
         }
 
         public frmPlaylist(string? selectedPlaylist, string playlistPath)
@@ -32,6 +39,10 @@ namespace CodeStream20
         private void lblPlaylistTitle_Click(object sender, EventArgs e)
         {
 
+        }
+        private void UpdateTrackCount()
+        {
+            lblTrackCountValue.Text = songs.Count.ToString();
         }
 
         private void lblCreationDateValue_Click(object sender, EventArgs e)
@@ -80,8 +91,12 @@ namespace CodeStream20
             try
             {
                 songs.Clear();
-
-                if (File.Exists(PlaylistPath))
+                if (currentPlaylist != null)
+                {
+                    // Load songs from the current playlist
+                    songs.AddRange(currentPlaylist.Songs);
+                }
+                else if (File.Exists(PlaylistPath))
                 {
                     string[] lines = File.ReadAllLines(PlaylistPath);
 
@@ -118,6 +133,7 @@ namespace CodeStream20
                         song.Genre
                     );
                 }
+                UpdateTrackCount();
             }
             catch (Exception ex)
             {
@@ -172,6 +188,7 @@ namespace CodeStream20
         {
             this.BackColor = ColorTranslator.FromHtml("#000424");
             this.ForeColor = Color.White;
+            lblPlaylistTitle.Text = SelectedPlaylist ?? "Playlist";
             btnUploadPlaylistArt.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnUploadPlaylistArt.ForeColor = Color.White;
             btnBackToHome.BackColor = ColorTranslator.FromHtml("#1f1fa1");
@@ -351,6 +368,50 @@ namespace CodeStream20
                 MessageBox.Show(
                     "There was an error sorting the songs.\n\n" + ex.Message,
                     "Sort Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        private void btnDeletePlaylist_Click(object sender, EventArgs e)
+        {
+            if (currentPlaylist == null)
+            {
+                MessageBox.Show(
+                    "No playlist is currently loaded.",
+                    "Delete Playlist",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+            DialogResult result = MessageBox.Show(
+                "Are you sure you want to delete the playlist \"" + currentPlaylist.Title + "\"?",
+                "Delete Playlist",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+            if (result != DialogResult.Yes) 
+            {
+                return;
+            }
+            try
+            {
+                DataManager.deletePlaylist(currentPlaylist);
+                MessageBox.Show(
+                    "Playlist deleted successfully.",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                this.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(
+                    "There was an error deleting the playlist.\n\n" + ex.Message,
+                    "Delete Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
