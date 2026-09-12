@@ -188,19 +188,45 @@ namespace CodeStream20
         {
             this.BackColor = ColorTranslator.FromHtml("#000424");
             this.ForeColor = Color.White;
+
             lblPlaylistTitle.Text = SelectedPlaylist ?? "Playlist";
+
+            // Upload Playlist Art button
             btnUploadPlaylistArt.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnUploadPlaylistArt.ForeColor = Color.White;
+
+            // Back to Home button
             btnBackToHome.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnBackToHome.ForeColor = Color.White;
-            //LoadPlaylistData();
+
+            // Add Song button
+            
+
+            // Delete Song button
+            btnDeleteSong.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnDeleteSong.ForeColor = Color.White;
+
+            // Delete Playlist button
+            btnDeletePlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnDeletePlaylist.ForeColor = Color.White;
+
+            // Sort button
+            btnSort.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnSort.ForeColor = Color.White;
+
+            // Load playlist artwork
             if (!string.IsNullOrEmpty(SelectedPlaylist))
             {
                 string[] exts = { ".png", ".jpg", ".jpeg", ".bmp" };
+
                 foreach (string ext in exts)
                 {
-                    string iconPath = Path.Combine(playlistIconFolder, SelectedPlaylist + ext);
-                    //getting the icon from the playlist icon folder
+                    string iconPath = Path.Combine(
+                        playlistIconFolder,
+                        SelectedPlaylist + ext
+                    );
+
+                    // Getting the icon from the playlist icon folder
                     if (File.Exists(iconPath))
                     {
                         pBoxCoverArt.Image = Image.FromFile(iconPath);
@@ -209,14 +235,14 @@ namespace CodeStream20
                 }
             }
 
-            //Sets date of creation of the playlist to the date the playlist file was created. This is done by checking if the playlist file exists and then getting the creation time of that file. The creation date is then displayed in the lblCreationDateValue label in the format "dd MMMM yyyy".
+            // Sets the creation date of the playlist to the date the file was created
             if (File.Exists(PlaylistPath))
             {
                 DateTime creationDate = File.GetCreationTime(PlaylistPath);
                 lblCreationDateValue.Text = creationDate.ToString("dd MMMM yyyy");
             }
 
-            //Load songs
+            // Load songs
             LoadSongs();
         }
 
