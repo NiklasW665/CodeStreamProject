@@ -169,7 +169,7 @@ namespace CodeStream20
         //this functions load the playlist of the current user for the playslist form
         public void LoadPlaylist(string username)
         {
-            lstPlaylists.Items.Clear();
+            //lstPlaylists.Items.Clear();
             playlistIconList.Images.Clear();
             //reset the in-memory list
             allPlaylists.Clear();
@@ -186,12 +186,13 @@ namespace CodeStream20
 
                     //read songs from the file and add them to the playlist object**
                     string[] lines = File.ReadAllLines(files[i]);
-                    foreach(string line in lines)
+                    foreach (string line in lines)
                     {
-                        if(!string.IsNullOrWhiteSpace(line))
+                        if (!string.IsNullOrWhiteSpace(line))
                         {
                             string songTitle = line.Split(',')[0];
-                            j.AddSong(songTitle);
+                            Song newSong = new Song(songTitle);
+                            j.AddSong(newSong);
                         }
                     }
                     allPlaylists.Add(j);
@@ -282,14 +283,16 @@ namespace CodeStream20
             this.ForeColor = Color.White;
             btnCreatePlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnCreatePlaylist.ForeColor = Color.White;
-            btnAddPlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
-            btnAddPlaylist.ForeColor = Color.White;
+            btnUploadSong.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnUploadSong.ForeColor = Color.White;
             btnOpenPlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnOpenPlaylist.ForeColor = Color.White;
             dgvPlaylists.BackgroundColor = ColorTranslator.FromHtml("#B1E5F2");
             dgvPlaylists.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#B1E5F2");
             grpStats.BackColor = ColorTranslator.FromHtml("#0000");
             grpStats.ForeColor = Color.White;
+            btnDeletePlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
+            btnDeletePlaylist.ForeColor = Color.White;
         }
 
         //Write the LoadStats method for the Stats
@@ -324,9 +327,9 @@ namespace CodeStream20
                 MessageBox.Show("Could not load stats: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-            
-            
-           
+
+
+
 
         private void btnCreatePlaylist_Click(object sender, EventArgs e)
         {
@@ -364,102 +367,164 @@ namespace CodeStream20
                 MessageBox.Show("Could not create playlist:" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void btnAddPlaylist_Click(object sender, EventArgs e)
+        private void AddSongToPlaylist(string playlistName, string songTitle, string songFilePath)
         {
-            if (dgvPlaylists.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Please select a playlist to add.", "No Playlist Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            string path = Path.Combine(playlistFolder, playlistName + ".txt");
             try
             {
-                using (OpenFileDialog ofd = new OpenFileDialog())
+                //Skip if this song is already in the playlist to avoid duplicates
+                if (File.Exists(path))
                 {
-                    ofd.Filter = "Audio Files (*.mp3; *.wav; *wma)|*.mp3; *.wav; *wma";
-                    ofd.Title = "Select a Song to Add";
-                    if (ofd.ShowDialog() != DialogResult.OK)
+                    string[] existingLines = File.ReadAllLines(path); // Reads everyline stored in the plalist's .txt file.
+                    foreach (string line in existingLines)
                     {
-                        return;
+                        //split the line into its 5 parts using the | as a divoder, then just take the first part which is the song's name.
+                        if (line.StartsWith(songTitle + "|", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return;
+                        }
                     }
-                    string songTitle = Path.GetFileNameWithoutExtension(ofd.FileName);
-                    string songName = songTitle + ", " + ofd.FileName;
-                    int addedCount = 0;
-                    int index = 0;
-                    while (index < dgvPlaylists.SelectedRows.Count)
+                }
+                string entry = songTitle + "|Unknown Artist|Unkown Album| Unkown Genre|" + songFilePath;
+                using (StreamWriter writer = new StreamWriter(path, true))
+                {
+                    writer.WriteLine(entry);
+                }
+                foreach (Playlist p in allPlaylists)
+                {
+                    if (p.Title == playlistName)
                     {
-                        string playlistName = dgvPlaylists.SelectedRows[index].Cells["PlaylistName"].Value.ToString();
-                        string path = Path.Combine(playlistFolder, playlistName + ".txt");
-                        try
-                        {
-                            if (!File.Exists(path))
-                            {
-                                MessageBox.Show("Playlist\"" + playlistName + "\" could not be found.", "Missing Playlist", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                index++;
-                                continue;
-                            }
-                            bool exist = false;
-                            using (StreamReader read = new StreamReader(path))
-                            {
-                                string line;
-                                while ((line = read.ReadLine()) != null)
-                                {
-                                    if (line.Equals(songName, StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        exist = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (exist)
-                            {
-                                index++;
-                                continue;
-                            }
-
-                            using (StreamWriter write = new StreamWriter(path, true))
-                            {
-                                write.WriteLine(songName);
-                            }
-                            addedCount++;
-                            //Update playlist object in memory **
-                           foreach(Playlist j in allPlaylists)
-                            {
-                                if (j.Title == playlistName)
-                                {
-                                    j.AddSong(songTitle);
-                                    break;
-                                }
-                            }
-                        }
-                        catch (Exception exInner)
-                        {
-                            MessageBox.Show("Could not add song to \"" + playlistName + "\": " + exInner.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        index++;
+                        Song newSong = new Song(songTitle);
+                        p.AddSong(newSong);
+                        break;
                     }
-
-                    //string selectedPlaylist = lstPlaylists.SelectedItems[0].Text;
-                    //string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
-                    //File.Copy(ofd.FileName, destinationPath, true);
-                    string selectedPlaylist = dgvPlaylists.SelectedRows[0].Cells["PlaylistName"].Value.ToString();
-                    string destinationPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
-                    
-                    LoadPlaylist(username);
-                    LoadStats();
-                    MessageBox.Show("Playlist added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error has occured while adding the song:" + ex.Message + "Error");
+                MessageBox.Show("Could not add song to" + "\n" + playlistName + " " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+        private void btnUploadSong_Click(object sender, EventArgs e)
+        {
+            if (allPlaylists.Count == 0)
+            {
+                MessageBox.Show("Create a playlist first before adding songs.", "No Playlists",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Audio Files (*.mp3;*.wav;*.wma)|*.mp3;*.wav;*.wma";
+                ofd.Title = "Select a Song to Upload";
+
+                if (ofd.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                string songTitle = Path.GetFileNameWithoutExtension(ofd.FileName);
+                string songFilePath = ofd.FileName;
+
+                //Build the list of playlist names to show as checkboxes in the popup
+                List<string> playlistNames = new List<string>();
+                foreach (Playlist p in allPlaylists)
+                {
+                    playlistNames.Add(p.Title);
+                }
+                //Show the popup and wait for the user to pick playlists
+                using (frmSelectPlaylists selectForm = new frmSelectPlaylists(playlistNames))
+                {
+                    if (selectForm.ShowDialog() != DialogResult.OK)
+                    {
+                        return;// use this when the user cancels or picks nothing
+                    }
+                    foreach (string playlistName in selectForm.SelectedPlaylists)
+                    {
+                        AddSongToPlaylist(playlistName, songTitle, songFilePath);
+                    }
+                }
+                //Refresh the Home page so the new song counts show up immediately
+                LoadPlaylist(username);
+                LoadStats();
+
+                MessageBox.Show("Song added to selected playlists.", "Success",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+
 
         private void btnOpenPlaylist_Click(object sender, EventArgs e)
         {
             openPlaylist();
+        }
+
+        private void btnDeletePlaylist_Click(object sender, EventArgs e)
+        {
+            //Make sure that the user actually selected a playlist row first
+            if(dgvPlaylists.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a playlist to delete.", "No playlist selected",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            // Get the name of the playlist the user clicked on
+            string playlistName = dgvPlaylists.SelectedRows[0].Cells["PlaylistName"].Value.ToString();
+
+            //Ask the user to confirm before deleting to prevent accidental deletions
+            DialogResult confirm = MessageBox.Show("Are you sure you want to delete \"" + playlistName + "\"? This cannot be undone.", "Confirm Delete",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            //If the user clicked "No", stop here and do nothing
+            if(confirm != DialogResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                //Build the full file path of the playlist's .txt file and delete it.
+                string playlistPath = Path.Combine(playlistFolder, playlistName + ".txt");
+                if(File.Exists(playlistPath))
+                {
+                    File.Delete(playlistPath);
+                }
+                //Delete the playlist's cover image by image extension 
+                string[] extensions = { ".png", ".jpg", ".jpeg", ".bmp" };
+                for ( int i = 0; i< extensions.Length; i++)
+                {
+                    string iconPath = Path.Combine(playlistIconFolder, playlistName + extensions[i]);
+                    if(File.Exists(iconPath))
+                    {
+                        File.Delete(iconPath);
+                    }
+                }
+                //Remove the plalist from the memory and loadstats
+                Playlist playlistToRemove = null;
+                foreach( Playlist p in allPlaylists)
+                {
+                    if(p.Title == playlistName)
+                    {
+                        playlistToRemove = p;
+                        break;
+                    }
+                }
+                if(playlistToRemove != null)
+                {
+                    allPlaylists.Remove(playlistToRemove);
+                }
+                //Refresh the grid and stats so the deleted playlist disappears from the home screen.
+                LoadPlaylist(username);
+                LoadStats();
+
+                MessageBox.Show("Playlist \"" + playlistName + "\" was deleted.", "Playlist Deleted",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Could not delete playlist: " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
