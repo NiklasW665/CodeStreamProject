@@ -25,7 +25,7 @@ namespace CodeStream20
         public frmHome(string username)
         {
             InitializeComponent();
-            EnsureFolderExits(playlistFolder);
+            //EnsureFolderExits(playlistFolder);
             EnsureFolderExits(userIconFolder);
             //EnsureFolderExits(playlistIconFolder);
             DataGridViewImageColumn imgCol = new DataGridViewImageColumn();
@@ -155,7 +155,7 @@ namespace CodeStream20
         //folder (Playlist/Shared) or (Playlist?<username> instead of the user icon folder)
         private string? PlaylistIcon(Playlist playlist)//uses playlist objects
         {
-            return DataManager.GetPlaylistIconPath(playlistFolder, playlist);
+            return DataManager.GetPlaylistIconPath(playlist);
         }
         //this functions load the playlist of the current user for the playslist form
         public void LoadPlaylist(string username)
@@ -169,7 +169,7 @@ namespace CodeStream20
             //openPlaylist();
             try
             {
-                allPlaylists = DataManager.loadUserPlaylists(playlistFolder, username);
+                allPlaylists = DataManager.loadUserPlaylists(username);
                 foreach (Playlist playlist in allPlaylists)
                 {
                     string? iconpath = PlaylistIcon(playlist);
@@ -400,7 +400,7 @@ namespace CodeStream20
                     IsShared = IsShared
                 };
                 //save the playlist object to a file as json in the right folder
-                DataManager.savePlaylist(playlistFolder, newPlaylist);
+                DataManager.savePlaylist(newPlaylist);
                 LoadPlaylist(username);
                 LoadStats();
                 MessageBox.Show("Playlist\"" + playlistName + "\" was created.", "Playlist Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -455,7 +455,7 @@ namespace CodeStream20
                             }
                             Song newSong = new Song(songTitle, "Unknown Artist", "Unknown Genre", TimeSpan.Zero, ofd.FileName);
                             targetPlaylist.AddSong(newSong);
-                            DataManager.savePlaylist(playlistFolder, targetPlaylist);
+                            DataManager.savePlaylist(targetPlaylist);
                             addedCount++;
 
                         }
@@ -497,7 +497,7 @@ namespace CodeStream20
                             MessageBox.Show("That is not a valid playlist file.", "Invalid Playlist", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        OpenPlaylistFromFile(ofd.FileName);
+                        OpenPlaylistWindow(playlist);
                     }
                     catch (Exception ex)
                     {

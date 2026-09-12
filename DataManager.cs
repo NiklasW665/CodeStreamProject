@@ -36,7 +36,7 @@ namespace CodeStream20
         //playlslist/shared/playlistname.json or playlist/username/playlistname.json
         //playlist objects (playlist + list<song>) serialized to json
         //create the correct folder structure for the playlists and shared playlists
-        public static string GetPlaylistFolder(string username, string playlistName, bool isShared)
+        public static string GetPlaylistFolder(string username, bool isShared)
         {
             string folderPath = isShared ? "Playlists/Shared" : $"Playlists/{username}";
             //Directory.CreateDirectory(folderPath); // Ensure the directory exists
@@ -52,26 +52,25 @@ namespace CodeStream20
                 // Handle the exception (e.g., log it, show a message to the user, etc.)
                 throw; // Rethrow the exception for now
             }
-            return Path.Combine(folderPath, $"{playlistName}.json");
+            return folderPath;
         } // this function only returns the path to the playlist file, not the folder. If you want to get the folder path, you can modify it to return just the folder without appending the playlist name and ".json".
-        public static string GetPlaylistFilePath(string baseFolder, Playlist playlist)
+        public static string GetPlaylistFilePath(Playlist playlist)
         {
-            string folderPath = GetPlaylistFolder(playlist.Owner, baseFolder, playlist.IsShared);
+            string folderPath = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
             return Path.Combine(folderPath, $"{playlist.Title}.json");
         }//this function return the excat.json file path
 
         //save a playlist to the correct folder structure
-        public static void savePlaylist(string basePlaylist, Playlist playlist)
+        public static void savePlaylist(Playlist playlist)
         {
-            string path = GetPlaylistFilePath(basePlaylist, playlist);
+            string path = GetPlaylistFilePath(playlist);
             string json = JsonSerializer.Serialize(playlist);// Serialize the playlist to JSON
-            string folder = GetPlaylistFolder(playlist.Owner, playlist.Title, playlist.IsShared);
-            
             File.WriteAllText(path, json);// Save the playlist to the file
         }
 
-        public static void deletePlaylist(string folder, Playlist playlist)
+        public static void deletePlaylist(Playlist playlist)
         {
+            string folder = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
             string path = Path.Combine(folder, playlist.Title + ".json");
             if (File.Exists(path))
             {
@@ -89,12 +88,11 @@ namespace CodeStream20
         }
 
         //load a playlist from the correct folder structure
-        public static List<Playlist> loadUserPlaylists(string basePlaylist, string username)
+        public static List<Playlist> loadUserPlaylists(string username)
         {
-
-            string ownFolder = GetPlaylistFolder(username, basePlaylist, false);
             List<Playlist> playlists = new List<Playlist>();
-            string sharedFolder = GetPlaylistFolder(username, basePlaylist, true);
+            string ownFolder = GetPlaylistFolder(username, false);
+            string sharedFolder = GetPlaylistFolder(username, true);
 
             loadPlaylistsFromFolder(ownFolder, playlists);
             loadPlaylistsFromFolder(sharedFolder, playlists);
@@ -128,13 +126,11 @@ namespace CodeStream20
         }
         // load cover art
         //returns the path to the cover art if it exists, otherwise returns null
-        public static string? GetPlaylistIconPath(string baseFolder, Playlist playlist)
+        public static string? GetPlaylistIconPath(Playlist playlist)
         {
             // GetPlaylistFolder currently returns the playlist file path (folder + "<name>.json"),
             // so take its directory as the folder to search for icons.
-            string playlistFilePath = GetPlaylistFolder(playlist.Owner, baseFolder, playlist.IsShared);
-            string folderPath = Path.GetDirectoryName(playlistFilePath) ?? baseFolder;
-
+            string folderPath = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
             if (!Directory.Exists(folderPath))
                 return null;
 
@@ -147,14 +143,9 @@ namespace CodeStream20
 
             return null;
         }
-        public static void SavePlaylistIcon(string baseFolder, Playlist playlist, string iconFilePath)
+        public static void SavePlaylistIcon(Playlist playlist, string iconFilePath)
         {
-            string playlistFilePath = GetPlaylistFolder(playlist.Owner, baseFolder, playlist.IsShared);
-            string folderPath = Path.GetDirectoryName(playlistFilePath) ?? baseFolder;
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
+            string folderPath = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
             string extension = Path.GetExtension(iconFilePath);
             if (Array.Exists(IconExtensions, ext => ext.Equals(extension, StringComparison.OrdinalIgnoreCase)))
             {
