@@ -223,41 +223,12 @@ namespace CodeStream20
             }
             OpenPlaylistWindow(playlist);
         }
-        /*
-        private void OpenPlaylistFromFile(string jsonFilePath)
-        {
-            try
-            {
-                string json = File.ReadAllText(jsonFilePath);
-                Playlist? playlist = JsonSerializer.Deserialize<Playlist>(json);
-                if (playlist != null)
-                {
-                    frmPlaylist playlistForm = new frmPlaylist(playlist.Title, jsonFilePath);
-                    playlistForm.FormClosed += (s, args) =>
-                    {
-                        LoadPlaylist(username); // Refresh the playlist list when the playlist form is closed
-                        LoadStats();
-                    };
-                    playlistForm.ShowDialog();
-                }
-                else
-                {
-                    MessageBox.Show("Could not load playlist from file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                OpenPlaylistWindow(playlist);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error opening playlist: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
-        }*/
-        //Opens a single playlist object in its own window so multiple playlist an be opened
+        
         private void OpenPlaylistWindow(Playlist playlist)
         {
             try
             {
-                frmPlaylist playlistForm = new frmPlaylist(playlist.Title, Path.Combine(playlistFolder, playlist.Title + ".txt"));
+                frmPlaylist playlistForm = new frmPlaylist(playlist);// passes the entire Playlist object
                 playlistForm.FormClosed += (s, args) =>
                 {
                     LoadPlaylist(username); // Refresh the playlist list when the playlist form is closed
@@ -313,8 +284,7 @@ namespace CodeStream20
             grpStats.ForeColor = Color.White;
             btnDeletePlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnDeletePlaylist.ForeColor = Color.White;
-            btnBrowsePlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
-            btnBrowsePlaylist.ForeColor = Color.White;
+            
         }
 
         //Write the LoadStats method for the Stats
@@ -419,6 +389,28 @@ namespace CodeStream20
         {
             openPlaylist();
         }
+        //Method to get song attributes into respective cells on the playlist dgv
+        private Song CreateSongFromFile(string filePath)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+
+            string name = fileName;
+            string artist = "Unknown Artist";
+            string album = "Unknown Album";
+            string genre = "Unknown Genre";
+
+            // Check if the filename follows "Artist - Title" format
+            if (fileName.Contains(" - "))
+            {
+                string[] parts = fileName.Split(new string[] { " - " }, 2, StringSplitOptions.None);
+                artist = parts[0].Trim();
+                name = parts[1].Trim();
+            }
+
+            return new Song(name, artist, album, genre, filePath);
+        }
+
+       
         private void AddSongToPlaylist(string playlistName, string songTitle, string songFilePath)
         {
             Playlist? targetPlaylist = null;
@@ -459,7 +451,7 @@ namespace CodeStream20
                 }
 
                 // Create the new song and add it to the playlist, then save the change
-                Song newSong = new Song(songTitle, "Unknown Artist", "Unknown Genre", TimeSpan.Zero, songFilePath);
+                Song newSong = CreateSongFromFile(songFilePath);
                 targetPlaylist.AddSong(newSong);
                 DataManager.savePlaylist(targetPlaylist);
             }
@@ -569,29 +561,7 @@ namespace CodeStream20
 
         private void btnBrowsePlaylist_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "Playlist Files (*.json)|*.json";
-                ofd.Title = "Browse for a Playlist";
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        string json = File.ReadAllText(ofd.FileName);
-                        Playlist? playlist = JsonSerializer.Deserialize<Playlist>(json);
-                        if (playlist == null)
-                        {
-                            MessageBox.Show("That is not a valid playlist file.", "Invalid Playlist", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        OpenPlaylistWindow(playlist);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Error opening playlist: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
+            
         }
 
 

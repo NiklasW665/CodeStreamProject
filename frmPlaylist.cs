@@ -61,16 +61,9 @@ namespace CodeStream20
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     pBoxCoverArt.Image = Image.FromFile(openFileDialog.FileName);
-                    if (!string.IsNullOrEmpty(SelectedPlaylist))
+                    if (currentPlaylist != null)
                     {
-                        // Remove old art in any format
-                        foreach (string oldExt in new[] { ".png", ".jpg", ".jpeg", ".bmp" })
-                        {
-                            string old = Path.Combine(playlistIconFolder, SelectedPlaylist + oldExt);
-                            if (File.Exists(old)) File.Delete(old);
-                        }
-                        string savePath = Path.Combine(playlistIconFolder, SelectedPlaylist + Path.GetExtension(openFileDialog.FileName));
-                        File.Copy(openFileDialog.FileName, savePath, true);
+                        DataManager.SavePlaylistIcon(currentPlaylist, openFileDialog.FileName);
                     }
                 }
             }
@@ -214,32 +207,31 @@ namespace CodeStream20
             btnSort.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnSort.ForeColor = Color.White;
 
-            // Load playlist artwork
-            if (!string.IsNullOrEmpty(SelectedPlaylist))
+            //DataGridView
+            // Make sure song grid text is always readable, regardless of the form's dark theme
+            dgvSongs.DefaultCellStyle.BackColor = Color.White;
+            dgvSongs.DefaultCellStyle.ForeColor = Color.Black;
+            dgvSongs.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
+            dgvSongs.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            // Load playlist artwork using DataManager
+            if (currentPlaylist != null)
             {
-                string[] exts = { ".png", ".jpg", ".jpeg", ".bmp" };
-
-                foreach (string ext in exts)
+                string? iconPath = DataManager.GetPlaylistIconPath(currentPlaylist);
+                if (iconPath != null)
                 {
-                    string iconPath = Path.Combine(
-                        playlistIconFolder,
-                        SelectedPlaylist + ext
-                    );
-
-                    // Getting the icon from the playlist icon folder
-                    if (File.Exists(iconPath))
-                    {
-                        pBoxCoverArt.Image = Image.FromFile(iconPath);
-                        break;
-                    }
+                    pBoxCoverArt.Image = Image.FromFile(iconPath);
                 }
             }
 
             // Sets the creation date of the playlist to the date the file was created
-            if (File.Exists(PlaylistPath))
+            if (currentPlaylist != null)
             {
-                DateTime creationDate = File.GetCreationTime(PlaylistPath);
-                lblCreationDateValue.Text = creationDate.ToString("dd MMMM yyyy");
+                string playlistFilePath = DataManager.GetPlaylistFilePath(currentPlaylist);
+                if (File.Exists(playlistFilePath))
+                {
+                    DateTime creationDate = File.GetCreationTime(playlistFilePath);
+                    lblCreationDateValue.Text = creationDate.ToString("dd MMMM yyyy");
+                }
             }
 
             // Load songs
@@ -317,10 +309,17 @@ namespace CodeStream20
                         // Remove the song from the current playlist
                         songs.RemoveAt(index);
 
-                        // Save the updated playlist
-                        SaveSongs();
+                        if (currentPlaylist != null)
+                        {
+                            // Keep the real Playlist object in sync, then save it as JSON
+                            currentPlaylist.Songs.RemoveAt(index);
+                            DataManager.savePlaylist(currentPlaylist);
+                        }
+                        else
+                        {
+                            SaveSongs(); // fallback for the old .txt-based path, just in case
+                        }
 
-                        // Refresh the DataGridView
                         LoadSongs();
 
                         MessageBox.Show(

@@ -67,7 +67,7 @@
             // 
             lblCreationDate.AutoSize = true;
             lblCreationDate.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCreationDate.Location = new Point(67, 481);
+            lblCreationDate.Location = new Point(29, 481);
             lblCreationDate.Name = "lblCreationDate";
             lblCreationDate.Size = new Size(143, 28);
             lblCreationDate.TabIndex = 2;
@@ -77,7 +77,7 @@
             // 
             lblCreationDateValue.AutoSize = true;
             lblCreationDateValue.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblCreationDateValue.Location = new Point(91, 509);
+            lblCreationDateValue.Location = new Point(51, 509);
             lblCreationDateValue.Name = "lblCreationDateValue";
             lblCreationDateValue.Size = new Size(84, 28);
             lblCreationDateValue.TabIndex = 3;
@@ -201,7 +201,7 @@
             // 
             lblTrackCountCaption.AutoSize = true;
             lblTrackCountCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTrackCountCaption.Location = new Point(229, 481);
+            lblTrackCountCaption.Location = new Point(259, 481);
             lblTrackCountCaption.Name = "lblTrackCountCaption";
             lblTrackCountCaption.Size = new Size(124, 28);
             lblTrackCountCaption.TabIndex = 13;
@@ -211,7 +211,7 @@
             // 
             lblTrackCountValue.AutoSize = true;
             lblTrackCountValue.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblTrackCountValue.Location = new Point(243, 513);
+            lblTrackCountValue.Location = new Point(281, 509);
             lblTrackCountValue.Name = "lblTrackCountValue";
             lblTrackCountValue.Size = new Size(84, 28);
             lblTrackCountValue.TabIndex = 14;

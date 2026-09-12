@@ -43,15 +43,14 @@ namespace CodeStream20
             flpPanel3 = new FlowLayoutPanel();
             lblTrackCount = new Label();
             lblCaption3 = new Label();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label1 = new Label();
+            lblCaption4 = new Label();
             btnCreatePlaylist = new Button();
             btnUploadSong = new Button();
             btnOpenPlaylist = new Button();
             dgvPlaylists = new DataGridView();
             btnDeletePlaylist = new Button();
-            btnBrowsePlaylist = new Button();
-            flowLayoutPanel1 = new FlowLayoutPanel();
-            label1 = new Label();
-            lblCaption4 = new Label();
             ((System.ComponentModel.ISupportInitialize)picUserIcon).BeginInit();
             grpStats.SuspendLayout();
             flpStats.SuspendLayout();
@@ -62,8 +61,8 @@ namespace CodeStream20
             flpPanel2.SuspendLayout();
             pnlTracks.SuspendLayout();
             flpPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvPlaylists).BeginInit();
             flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvPlaylists).BeginInit();
             SuspendLayout();
             // 
             // lblWelcome
@@ -257,71 +256,6 @@ namespace CodeStream20
             lblCaption3.TabIndex = 1;
             lblCaption3.Text = "Total Tracks";
             // 
-            // btnCreatePlaylist
-            // 
-            btnCreatePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCreatePlaylist.Location = new Point(24, 330);
-            btnCreatePlaylist.Name = "btnCreatePlaylist";
-            btnCreatePlaylist.Size = new Size(163, 37);
-            btnCreatePlaylist.TabIndex = 6;
-            btnCreatePlaylist.Text = "Create Playlist";
-            btnCreatePlaylist.UseVisualStyleBackColor = true;
-            btnCreatePlaylist.Click += btnCreatePlaylist_Click;
-            // 
-            // btnUploadSong
-            // 
-            btnUploadSong.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnUploadSong.Location = new Point(208, 330);
-            btnUploadSong.Name = "btnUploadSong";
-            btnUploadSong.Size = new Size(163, 37);
-            btnUploadSong.TabIndex = 7;
-            btnUploadSong.Text = "Upload a Song";
-            btnUploadSong.UseVisualStyleBackColor = true;
-            btnUploadSong.Click += btnUploadSong_Click;
-            // 
-            // btnOpenPlaylist
-            // 
-            btnOpenPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnOpenPlaylist.Location = new Point(392, 330);
-            btnOpenPlaylist.Name = "btnOpenPlaylist";
-            btnOpenPlaylist.Size = new Size(163, 37);
-            btnOpenPlaylist.TabIndex = 9;
-            btnOpenPlaylist.Text = "Open Playlist";
-            btnOpenPlaylist.UseVisualStyleBackColor = true;
-            btnOpenPlaylist.Click += btnOpenPlaylist_Click;
-            // 
-            // dgvPlaylists
-            // 
-            dgvPlaylists.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPlaylists.Location = new Point(24, 129);
-            dgvPlaylists.Margin = new Padding(3, 4, 3, 4);
-            dgvPlaylists.Name = "dgvPlaylists";
-            dgvPlaylists.RowHeadersWidth = 51;
-            dgvPlaylists.Size = new Size(880, 180);
-            dgvPlaylists.TabIndex = 10;
-            // 
-            // btnDeletePlaylist
-            // 
-            btnDeletePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeletePlaylist.Location = new Point(576, 330);
-            btnDeletePlaylist.Name = "btnDeletePlaylist";
-            btnDeletePlaylist.Size = new Size(163, 37);
-            btnDeletePlaylist.TabIndex = 11;
-            btnDeletePlaylist.Text = "Delete Playlist";
-            btnDeletePlaylist.UseVisualStyleBackColor = true;
-            btnDeletePlaylist.Click += btnDeletePlaylist_Click;
-            // 
-            // btnBrowsePlaylist
-            // 
-            btnBrowsePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnBrowsePlaylist.Location = new Point(760, 330);
-            btnBrowsePlaylist.Name = "btnBrowsePlaylist";
-            btnBrowsePlaylist.Size = new Size(163, 37);
-            btnBrowsePlaylist.TabIndex = 12;
-            btnBrowsePlaylist.Text = "Browse for Playlist";
-            btnBrowsePlaylist.UseVisualStyleBackColor = true;
-            btnBrowsePlaylist.Click += btnBrowsePlaylist_Click;
-            // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Controls.Add(label1);
@@ -351,12 +285,65 @@ namespace CodeStream20
             lblCaption4.TabIndex = 1;
             lblCaption4.Text = "Largest Playlist";
             // 
+            // btnCreatePlaylist
+            // 
+            btnCreatePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCreatePlaylist.Location = new Point(73, 330);
+            btnCreatePlaylist.Name = "btnCreatePlaylist";
+            btnCreatePlaylist.Size = new Size(163, 37);
+            btnCreatePlaylist.TabIndex = 6;
+            btnCreatePlaylist.Text = "Create Playlist";
+            btnCreatePlaylist.UseVisualStyleBackColor = true;
+            btnCreatePlaylist.Click += btnCreatePlaylist_Click;
+            // 
+            // btnUploadSong
+            // 
+            btnUploadSong.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnUploadSong.Location = new Point(272, 330);
+            btnUploadSong.Name = "btnUploadSong";
+            btnUploadSong.Size = new Size(163, 37);
+            btnUploadSong.TabIndex = 7;
+            btnUploadSong.Text = "Upload a Song";
+            btnUploadSong.UseVisualStyleBackColor = true;
+            btnUploadSong.Click += btnUploadSong_Click;
+            // 
+            // btnOpenPlaylist
+            // 
+            btnOpenPlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnOpenPlaylist.Location = new Point(485, 330);
+            btnOpenPlaylist.Name = "btnOpenPlaylist";
+            btnOpenPlaylist.Size = new Size(163, 37);
+            btnOpenPlaylist.TabIndex = 9;
+            btnOpenPlaylist.Text = "Open Playlist";
+            btnOpenPlaylist.UseVisualStyleBackColor = true;
+            btnOpenPlaylist.Click += btnOpenPlaylist_Click;
+            // 
+            // dgvPlaylists
+            // 
+            dgvPlaylists.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPlaylists.Location = new Point(24, 129);
+            dgvPlaylists.Margin = new Padding(3, 4, 3, 4);
+            dgvPlaylists.Name = "dgvPlaylists";
+            dgvPlaylists.RowHeadersWidth = 51;
+            dgvPlaylists.Size = new Size(880, 180);
+            dgvPlaylists.TabIndex = 10;
+            // 
+            // btnDeletePlaylist
+            // 
+            btnDeletePlaylist.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeletePlaylist.Location = new Point(691, 330);
+            btnDeletePlaylist.Name = "btnDeletePlaylist";
+            btnDeletePlaylist.Size = new Size(163, 37);
+            btnDeletePlaylist.TabIndex = 11;
+            btnDeletePlaylist.Text = "Delete Playlist";
+            btnDeletePlaylist.UseVisualStyleBackColor = true;
+            btnDeletePlaylist.Click += btnDeletePlaylist_Click;
+            // 
             // frmHome
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(953, 655);
-            Controls.Add(btnBrowsePlaylist);
             Controls.Add(btnDeletePlaylist);
             Controls.Add(dgvPlaylists);
             Controls.Add(btnOpenPlaylist);
@@ -384,9 +371,9 @@ namespace CodeStream20
             pnlTracks.ResumeLayout(false);
             flpPanel3.ResumeLayout(false);
             flpPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvPlaylists).EndInit();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvPlaylists).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -425,7 +412,6 @@ namespace CodeStream20
         private Button btnOpenPlaylist;
         private DataGridView dgvPlaylists;
         private Button btnDeletePlaylist;
-        private Button btnBrowsePlaylist;
         private FlowLayoutPanel flowLayoutPanel1;
         private Label label1;
         private Label lblCaption4;
