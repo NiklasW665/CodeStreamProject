@@ -173,6 +173,7 @@ namespace CodeStream20
             playlistIconList.Images.Clear();
             //reset the in-memory list
             allPlaylists.Clear();
+            dgvPlaylists.Rows.Clear();
             //openPlaylist();
             try
             {
