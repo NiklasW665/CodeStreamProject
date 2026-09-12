@@ -20,5 +20,13 @@ namespace CodeStream20
             Genre = genre;
             FilePath = filePath;
         }
+
+        public Song(string songTitle, string v1, string v2, TimeSpan zero, string fileName)
+        {
+        }
+
+        public Song()
+        {
+        }
     }
 }

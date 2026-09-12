@@ -8,8 +8,11 @@ using System.Text.Json;
 
 namespace CodeStream20
 {
+    [Serializable]
     public class DataManager
     {
+        private static readonly string[] IconExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif", ".ico" };
+
         public static List<Playlist> SongLibrary { get; set; } = new List<Playlist>();
         public static List<Playlist> UserPlaylists { get; set; } = new List<Playlist>();
 
@@ -86,15 +89,15 @@ namespace CodeStream20
         }
 
         //load a playlist from the correct folder structure
-        public static List<Playlist> loadUserPlaylists(string username, bool isShared)
+        public static List<Playlist> loadUserPlaylists(string basePlaylist, string username)
         {
-            
-            string ownFolder = GetPlaylistFolder(username, basePlaylist, false)
+
+            string ownFolder = GetPlaylistFolder(username, basePlaylist, false);
             List<Playlist> playlists = new List<Playlist>();
-            string sharedFolder = GetPlaylistFolder(username, basePlaylist, isShared);
-            
+            string sharedFolder = GetPlaylistFolder(username, basePlaylist, true);
+
             loadPlaylistsFromFolder(ownFolder, playlists);
-            loadPlaylistsFromFolder(sharedFolder, playlists); 
+            loadPlaylistsFromFolder(sharedFolder, playlists);
             UserPlaylists = playlists;
             return playlists;
         }
@@ -107,31 +110,57 @@ namespace CodeStream20
 
             string[] files = Directory.GetFiles(folderPath, "*.json");
             foreach (string file in files)
-        {
-            try
             {
-                if (Directory.Exists(folderPath))
+                try
                 {
-                    string[] files = Directory.GetFiles(folderPath, "*.json");
-                    foreach (string file in files)
-                    {
-                        string json = File.ReadAllText(file);
+                    string json = File.ReadAllText(file);
                     Playlist? playlist = JsonSerializer.Deserialize<Playlist>(json);
-                        if (playlist != null)
-                        {
-                            playlists.Add(playlist);
-                        }
+                    if (playlist != null)
+                    {
+                        playlists.Add(playlist);
                     }
+                }
                 catch (Exception)
                 {
                     return;
-                }
+                } 
             }
-            catch (Exception ex) 
-            { 
-                
+        }
+        // load cover art
+        //returns the path to the cover art if it exists, otherwise returns null
+        public static string? GetPlaylistIconPath(string baseFolder, Playlist playlist)
+        {
+            // GetPlaylistFolder currently returns the playlist file path (folder + "<name>.json"),
+            // so take its directory as the folder to search for icons.
+            string playlistFilePath = GetPlaylistFolder(playlist.Owner, baseFolder, playlist.IsShared);
+            string folderPath = Path.GetDirectoryName(playlistFilePath) ?? baseFolder;
+
+            if (!Directory.Exists(folderPath))
+                return null;
+
+            foreach (var ext in IconExtensions)
+            {
+                string iconPath = Path.Combine(folderPath, playlist.Title + ext);
+                if (File.Exists(iconPath))
+                    return iconPath;
             }
 
+            return null;
+        }
+        public static void SavePlaylistIcon(string baseFolder, Playlist playlist, string iconFilePath)
+        {
+            string playlistFilePath = GetPlaylistFolder(playlist.Owner, baseFolder, playlist.IsShared);
+            string folderPath = Path.GetDirectoryName(playlistFilePath) ?? baseFolder;
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            string extension = Path.GetExtension(iconFilePath);
+            if (Array.Exists(IconExtensions, ext => ext.Equals(extension, StringComparison.OrdinalIgnoreCase)))
+            {
+                string destinationPath = Path.Combine(folderPath, playlist.Title + extension);
+                File.Copy(iconFilePath, destinationPath, true); // Overwrite if exists
+            }
         }
     }
 }

@@ -20,13 +20,18 @@
             base.Dispose(disposing);
         }
 
+        private void InitializeComponent()
+        {
+            InitializeComponent(btnAddPlaylist);
+        }
+
         #region Windows Form Designer generated code
 
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent(Button btnAddPlaylist1)
         {
             lblWelcome = new Label();
             lblPlaylists = new Label();
@@ -289,7 +294,7 @@
             btnAddPlaylist.TabIndex = 7;
             btnAddPlaylist.Text = "Upload a Song";
             btnAddPlaylist.UseVisualStyleBackColor = true;
-            btnAddPlaylist.Click += btnAddPlaylist_Click;
+            btnAddPlaylist.Click += btnAddPlaylist_Cilck;
             // 
             // btnOpenPlaylist
             // 
