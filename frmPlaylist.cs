@@ -14,7 +14,7 @@ namespace CodeStream20
         private List<Song> songs = new List<Song>();
         public string? SelectedPlaylist { get; }
         public string PlaylistPath { get; } = string.Empty;
-        private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
+        //private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
         //Puts the PlayListIcon folder in the application startup path
         private Playlist? currentPlaylist;
         public frmPlaylist()
@@ -61,7 +61,10 @@ namespace CodeStream20
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     pBoxCoverArt.Image = Image.FromFile(openFileDialog.FileName);
-                    if (!string.IsNullOrEmpty(SelectedPlaylist))
+                    if(currentPlaylist != null)
+                    {
+                        DataManager.SavePlaylistIcon(currentPlaylist, openFileDialog.FileName);
+                    }/* if (!string.IsNullOrEmpty(SelectedPlaylist))
                     {
                         // Remove old art in any format
                         foreach (string oldExt in new[] { ".png", ".jpg", ".jpeg", ".bmp" })
@@ -71,7 +74,7 @@ namespace CodeStream20
                         }
                         string savePath = Path.Combine(playlistIconFolder, SelectedPlaylist + Path.GetExtension(openFileDialog.FileName));
                         File.Copy(openFileDialog.FileName, savePath, true);
-                    }
+                    }*/
                 }
             }
             catch (Exception ex)
@@ -215,27 +218,20 @@ namespace CodeStream20
             btnSort.ForeColor = Color.White;
 
             // Load playlist artwork
-            if (!string.IsNullOrEmpty(SelectedPlaylist))
+            if(currentPlaylist != null)
             {
-                string[] exts = { ".png", ".jpg", ".jpeg", ".bmp" };
-
-                foreach (string ext in exts)
+                string? iconPath = DataManager.GetPlaylistIconPath(currentPlaylist);
+                if(iconPath != null)
                 {
-                    string iconPath = Path.Combine(
-                        playlistIconFolder,
-                        SelectedPlaylist + ext
-                    );
-
-                    // Getting the icon from the playlist icon folder
-                    if (File.Exists(iconPath))
-                    {
-                        pBoxCoverArt.Image = Image.FromFile(iconPath);
-                        break;
-                    }
+                    pBoxCoverArt.Image = Image.FromFile(iconPath);
                 }
             }
 
             // Sets the creation date of the playlist to the date the file was created
+            if(currentPlaylist != null)
+            {
+                lblCreationDate.Text = currentPlaylist.CreatedDate.ToString("dd MMMM yyyy");
+            } else
             if (File.Exists(PlaylistPath))
             {
                 DateTime creationDate = File.GetCreationTime(PlaylistPath);

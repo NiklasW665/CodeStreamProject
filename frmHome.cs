@@ -257,7 +257,7 @@ namespace CodeStream20
         {
             try
             {
-                frmPlaylist playlistForm = new frmPlaylist(playlist.Title, Path.Combine(playlistFolder, playlist.Title + ".txt"));
+                frmPlaylist playlistForm = new frmPlaylist(playlist);
                 playlistForm.FormClosed += (s, args) =>
                 {
                     LoadPlaylist(username); // Refresh the playlist list when the playlist form is closed
@@ -573,6 +573,7 @@ namespace CodeStream20
             {
                 ofd.Filter = "Playlist Files (*.json)|*.json";
                 ofd.Title = "Browse for a Playlist";
+                ofd.InitialDirectory = DataManager.GetPlaylistRootFolder();//the parent folder
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     try
@@ -581,7 +582,9 @@ namespace CodeStream20
                         Playlist? playlist = JsonSerializer.Deserialize<Playlist>(json);
                         if (playlist == null)
                         {
-                            MessageBox.Show("That is not a valid playlist file.", "Invalid Playlist", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("That is not a valid playlist file.",
+                                "Invalid Playlist", MessageBoxButtons.OK, 
+                                MessageBoxIcon.Error);
                             return;
                         }
                         OpenPlaylistWindow(playlist);
