@@ -11,5 +11,14 @@ namespace CodeStream20
         public string Album { get; set; } = string.Empty;
         public string Genre { get; set; } = string.Empty;
         public string FilePath { get; set; } = string.Empty;
+
+        public Song(string name, string artist, string album, string genre, string filePath)
+        {
+            Name = name;
+            Artist = artist;
+            Album = album;
+            Genre = genre;
+            FilePath = filePath;
+        }
     }
 }

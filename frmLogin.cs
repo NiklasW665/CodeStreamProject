@@ -28,7 +28,7 @@ namespace CodeStream20
             //try catch block when no file is found
             try
             {
-                string json = File.ReadAllText("User.json"); //using json file to store user data
+                //string json = File.ReadAllText("User.json"); //using json file to store user data
                 string json = File.ReadAllText(User.UsersFilePath); //using json file to store user data
                 List<User> users = JsonSerializer.Deserialize<List<User>>(json); //taking the data from the json file and storing it in a variable of type List<User>
 

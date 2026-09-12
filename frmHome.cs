@@ -169,7 +169,7 @@ namespace CodeStream20
         //this functions load the playlist of the current user for the playslist form
         public void LoadPlaylist(string username)
         {
-            lstPlaylists.Items.Clear();
+            //lstPlaylists.Items.Clear();
             playlistIconList.Images.Clear();
             //reset the in-memory list
             allPlaylists.Clear();
