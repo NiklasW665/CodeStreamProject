@@ -205,7 +205,7 @@ namespace CodeStream20
             // Delete Song button
             btnDeleteSong.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnDeleteSong.ForeColor = Color.White;
-
+            btnDeleteSong.Enabled = true;
             // Delete Playlist button
             btnDeletePlaylist.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnDeletePlaylist.ForeColor = Color.White;

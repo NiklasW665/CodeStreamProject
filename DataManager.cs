@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.Json;
 
 namespace CodeStream20
 {
-    [Serializable]
+    
     public class DataManager
     {
         private static readonly string[] IconExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif", ".ico" };
@@ -16,7 +14,7 @@ namespace CodeStream20
         public static List<Playlist> SongLibrary { get; set; } = new List<Playlist>();
         public static List<Playlist> UserPlaylists { get; set; } = new List<Playlist>();
 
-        // Methods to handle  Serialization / File Persistence
+        // Methods to handle Serialization / File Persistence
         public static void SaveData(string filePath)
         {
             string json = JsonSerializer.Serialize(UserPlaylists);
@@ -84,6 +82,20 @@ namespace CodeStream20
                 {
                     File.Delete(iconPath);
                 }
+            try
+                {
+                    if (File.Exists(path)) File.Delete(path);
+                    foreach (var ext in IconExtensions)
+                    {
+                       
+                        if (File.Exists(iconPath)) File.Delete(iconPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to delete playlist: {ex.Message}");
+                }
+
             }
         }
 
@@ -120,7 +132,7 @@ namespace CodeStream20
                 }
                 catch (Exception)
                 {
-                    return;
+                    continue;
                 } 
             }
         }
