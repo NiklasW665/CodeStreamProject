@@ -16,10 +16,17 @@ namespace CodeStream20
         public string PlaylistPath { get; } = string.Empty;
         private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
         //Puts the PlayListIcon folder in the application startup path
-
+       private Playlist? currentPlaylist;
         public frmPlaylist()
         {
             InitializeComponent();
+        }
+        public frmPlaylist(Playlist playlist)
+        {
+            InitializeComponent();
+            currentPlaylist = playlist;
+            SelectedPlaylist = playlist.Title;
+            //PlaylistPath = playlist.FilePath;
         }
 
         public frmPlaylist(string? selectedPlaylist, string playlistPath)
@@ -80,8 +87,12 @@ namespace CodeStream20
             try
             {
                 songs.Clear();
-
-                if (File.Exists(PlaylistPath))
+                if (currentPlaylist != null)
+                {
+                    // Load songs from the current playlist
+                    songs.AddRange(currentPlaylist.Songs);
+                }
+                else if (File.Exists(PlaylistPath))
                 {
                     string[] lines = File.ReadAllLines(PlaylistPath);
 
@@ -172,6 +183,7 @@ namespace CodeStream20
         {
             this.BackColor = ColorTranslator.FromHtml("#000424");
             this.ForeColor = Color.White;
+            lblPlaylistTitle.Text = SelectedPlaylist ?? "Playlist";
             btnUploadPlaylistArt.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnUploadPlaylistArt.ForeColor = Color.White;
             btnBackToHome.BackColor = ColorTranslator.FromHtml("#1f1fa1");

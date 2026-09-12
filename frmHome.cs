@@ -230,33 +230,18 @@ namespace CodeStream20
                 MessageBox.Show("Please select a playlist to open.", "No Playlist Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            try
+            
+            string selectedPlaylist = dgvPlaylists.SelectedRows[0].Cells["PlaylistName"].Value.ToString();
+            Playlist? playlist = allPlaylists.Find(p => p.Title.Equals(selectedPlaylist, StringComparison.OrdinalIgnoreCase));
+            if (playlist == null)
             {
-                string selectedPlaylist = dgvPlaylists.SelectedRows[0].Cells["PlaylistName"].Value.ToString();
-                string playlistPath = Path.Combine(playlistFolder, selectedPlaylist + ".txt");
-                if (!File.Exists(playlistPath))
-                {
-                    MessageBox.Show("The selected playlist does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LoadPlaylist(username);
-                    return;
-                }
-
-                frmPlaylist playlist = new frmPlaylist(selectedPlaylist, playlistPath);
-                //lstPlaylists.Items.Add(playlist);
-
-                playlist.FormClosed += (s, args) =>
-                {
-                    LoadPlaylist(username); // Refresh the playlist list when the playlist form is closed
-                    LoadStats();
-                };
-                playlist.ShowDialog();
+                MessageBox.Show("Playlist not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LoadPlaylist(username); // Refresh the playlist list    
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error opening playlist: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            OpenPlaylistWindow(playlist);
         }
-
+        /*
         private void OpenPlaylistFromFile(string jsonFilePath)
         {
             try
@@ -284,7 +269,7 @@ namespace CodeStream20
                 MessageBox.Show("Error opening playlist: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
-        }
+        }*/
         //Opens a single playlist object in its own window so multiple playlist an be opened
         private void OpenPlaylistWindow(Playlist playlist)
         {
@@ -378,9 +363,9 @@ namespace CodeStream20
                 MessageBox.Show("Could not load stats: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-            
-            
-           
+
+
+
 
         private void btnCreatePlaylist_Click(object sender, EventArgs e)
         {
@@ -400,14 +385,14 @@ namespace CodeStream20
                     i++;
                 }
                 bool alreadyExists = allPlaylists.Exists(p => p.Title.Equals(playlistName, StringComparison.OrdinalIgnoreCase));
-                if(alreadyExists)
+                if (alreadyExists)
                 {
                     MessageBox.Show("A playlist with that name already exists", "Duplicate Playlist", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 //ask whether the user wants to create a shared playlist or a personal playlist
-                DialogResult result = MessageBox.Show("Do you want to create a shared playlist?\"" + "Should"+ playlistName +"be shared with everyone?\n" + "Yes your account is public / No keep your account private" + MessageBoxButtons.YesNo + MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show("Do you want to create a shared playlist?\"" + "Should" + playlistName + "be shared with everyone?\n" + "Yes your account is public / No keep your account private" + MessageBoxButtons.YesNo + MessageBoxIcon.Question);
                 bool IsShared = (result == DialogResult.Yes);
                 Playlist newPlaylist = new Playlist(playlistName, "Unknown Artist", "Unknown Genre", TimeSpan.Zero, "Unknown Path")
                 {
@@ -419,8 +404,8 @@ namespace CodeStream20
                 LoadPlaylist(username);
                 LoadStats();
                 MessageBox.Show("Playlist\"" + playlistName + "\" was created.", "Playlist Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
-                
+
+
             }
             catch (Exception ex)
             {
@@ -430,7 +415,7 @@ namespace CodeStream20
         }
         private void btnAddPlaylist_Cilck(object sender, EventArgs e)
         {
-            if(dgvPlaylists.SelectedRows.Count == 0)
+            if (dgvPlaylists.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Please select a playlist to add a song to.", "No Playlist Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -493,6 +478,33 @@ namespace CodeStream20
         private void btnOpenPlaylist_Click(object sender, EventArgs e)
         {
             openPlaylist();
+        }
+
+        private void btnBrowsePlaylist_Click(object sender, EventArgs e)
+        {   
+            using(OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "Playlist Files (*.json)|*.json";
+                ofd.Title = "Browse for a Playlist";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(ofd.FileName);
+                        Playlist? playlist = JsonSerializer.Deserialize<Playlist>(json);
+                        if (playlist == null)
+                        {
+                            MessageBox.Show("That is not a valid playlist file.", "Invalid Playlist", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        OpenPlaylistFromFile(ofd.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error opening playlist: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }    
+                }
+            }
         }
     }
 }
