@@ -46,6 +46,7 @@
             btnSort = new Button();
             lblTrackCountCaption = new Label();
             lblTrackCountValue = new Label();
+            btnDeletePlaylist = new Button();
             ((System.ComponentModel.ISupportInitialize)pBoxCoverArt).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvSongs).BeginInit();
             ((System.ComponentModel.ISupportInitialize)axWindowsMediaPlayer1).BeginInit();
@@ -107,7 +108,7 @@
             // 
             // btnBackToHome
             // 
-            btnBackToHome.Location = new Point(749, 509);
+            btnBackToHome.Location = new Point(748, 513);
             btnBackToHome.Name = "btnBackToHome";
             btnBackToHome.Size = new Size(125, 43);
             btnBackToHome.TabIndex = 6;
@@ -216,11 +217,22 @@
             lblTrackCountValue.TabIndex = 14;
             lblTrackCountValue.Text = "---------";
             // 
+            // btnDeletePlaylist
+            // 
+            btnDeletePlaylist.Location = new Point(741, 432);
+            btnDeletePlaylist.Name = "btnDeletePlaylist";
+            btnDeletePlaylist.Size = new Size(132, 43);
+            btnDeletePlaylist.TabIndex = 15;
+            btnDeletePlaylist.Text = "Delete Playlist";
+            btnDeletePlaylist.UseVisualStyleBackColor = true;
+            btnDeletePlaylist.Click += btnDeletePlaylist_Click;
+            // 
             // frmPlaylist
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(914, 600);
+            Controls.Add(btnDeletePlaylist);
             Controls.Add(lblTrackCountValue);
             Controls.Add(lblTrackCountCaption);
             Controls.Add(btnSort);
@@ -264,5 +276,6 @@
         private Button btnSort;
         private Label lblTrackCountCaption;
         private Label lblTrackCountValue;
+        private Button btnDeletePlaylist;
     }
 }

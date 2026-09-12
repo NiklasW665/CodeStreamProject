@@ -47,6 +47,9 @@
             btnOpenPlaylist = new Button();
             dgvPlaylists = new DataGridView();
             btnBrowsePlaylist = new Button();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label1 = new Label();
+            lblCaption4 = new Label();
             ((System.ComponentModel.ISupportInitialize)picUserIcon).BeginInit();
             grpStats.SuspendLayout();
             flpStats.SuspendLayout();
@@ -58,6 +61,7 @@
             pnlTracks.SuspendLayout();
             flpPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPlaylists).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // lblWelcome
@@ -114,6 +118,7 @@
             flpStats.Controls.Add(pnlTotalPlaylist);
             flpStats.Controls.Add(pnlHeavy);
             flpStats.Controls.Add(pnlTracks);
+            flpStats.Controls.Add(flowLayoutPanel1);
             flpStats.Dock = DockStyle.Fill;
             flpStats.Location = new Point(3, 30);
             flpStats.Name = "flpStats";
@@ -304,11 +309,40 @@
             btnBrowsePlaylist.UseVisualStyleBackColor = true;
             btnBrowsePlaylist.Click += btnBrowsePlaylist_Click;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(label1);
+            flowLayoutPanel1.Controls.Add(lblCaption4);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(621, 3);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(200, 100);
+            flowLayoutPanel1.TabIndex = 7;
+            flowLayoutPanel1.WrapContents = false;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(23, 28);
+            label1.TabIndex = 0;
+            label1.Text = "0";
+            // 
+            // lblCaption4
+            // 
+            lblCaption4.AutoSize = true;
+            lblCaption4.Location = new Point(3, 28);
+            lblCaption4.Name = "lblCaption4";
+            lblCaption4.Size = new Size(147, 28);
+            lblCaption4.TabIndex = 1;
+            lblCaption4.Text = "Largest Playlist";
+            // 
             // frmHome
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(853, 593);
+            ClientSize = new Size(936, 655);
             Controls.Add(btnBrowsePlaylist);
             Controls.Add(dgvPlaylists);
             Controls.Add(btnOpenPlaylist);
@@ -337,6 +371,8 @@
             flpPanel3.ResumeLayout(false);
             flpPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPlaylists).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -375,5 +411,8 @@
         private Button btnOpenPlaylist;
         private DataGridView dgvPlaylists;
         private Button btnBrowsePlaylist;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label label1;
+        private Label lblCaption4;
     }
 }

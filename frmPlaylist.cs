@@ -16,7 +16,7 @@ namespace CodeStream20
         public string PlaylistPath { get; } = string.Empty;
         private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
         //Puts the PlayListIcon folder in the application startup path
-       private Playlist? currentPlaylist;
+        private Playlist? currentPlaylist;
         public frmPlaylist()
         {
             InitializeComponent();
@@ -368,6 +368,50 @@ namespace CodeStream20
                 MessageBox.Show(
                     "There was an error sorting the songs.\n\n" + ex.Message,
                     "Sort Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
+        private void btnDeletePlaylist_Click(object sender, EventArgs e)
+        {
+            if (currentPlaylist == null)
+            {
+                MessageBox.Show(
+                    "No playlist is currently loaded.",
+                    "Delete Playlist",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+            DialogResult result = MessageBox.Show(
+                "Are you sure you want to delete the playlist \"" + currentPlaylist.Title + "\"?",
+                "Delete Playlist",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+            if (result != DialogResult.Yes) 
+            {
+                return;
+            }
+            try
+            {
+                DataManager.deletePlaylist(currentPlaylist);
+                MessageBox.Show(
+                    "Playlist deleted successfully.",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                this.Close();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(
+                    "There was an error deleting the playlist.\n\n" + ex.Message,
+                    "Delete Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );

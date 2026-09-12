@@ -61,6 +61,17 @@ namespace CodeStream20
                          //user name label under icon
             lblUser.Text = username;
         }
+        //2d array of the playlist title, track count pairs
+        private string[,] BuildPlaylistSummaryArray()
+        {
+            string[,] summary = new string[allPlaylists.Count, 2];
+            for (int i = 0; i < allPlaylists.Count; i++)
+            {
+                summary[i, 0] = allPlaylists[i].Title;
+                summary[i, 1] = allPlaylists[i].Songs.Count.ToString();
+            }
+            return summary;
+        }
 
         //allow the user to change their icon by clicking on it and selecting a new image file
         private void PicUserIcon_Click(object? sender, EventArgs e)
@@ -357,6 +368,20 @@ namespace CodeStream20
                 lblTotalplaylists.Text = totalPlaylists.ToString();
                 lblTrackCount.Text = totalTracks.ToString();
                 lblTopArtist.Text = averageSongs.ToString("0.0");
+                //2d array of the playlist title, track count pairs
+                string[,] summary = BuildPlaylistSummaryArray();
+                string largestPlaylist = "None";
+                int largestCount = -1;
+                for(int i = 0; i < summary.GetLength(0); i++)
+                {
+                    int count = int.Parse(summary[i, 1]);
+                    if (count > largestCount)
+                    {
+                        largestCount = count;
+                        largestPlaylist = summary[i, 0];
+                    }
+                }
+                lblCaption4.Text = $"\"{largestPlaylist}\" with {largestCount} tracks";
             }
             catch (Exception ex)
             {
@@ -392,7 +417,9 @@ namespace CodeStream20
                 }
 
                 //ask whether the user wants to create a shared playlist or a personal playlist
-                DialogResult result = MessageBox.Show("Do you want to create a shared playlist?\"" + "Should" + playlistName + "be shared with everyone?\n" + "Yes your account is public / No keep your account private" + MessageBoxButtons.YesNo + MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show("Should \"{playlistName}\" be shared with everyone?\n\nYes" +
+                    "= public playlist/ No = private playlist", "Create Shared Playlist", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 bool IsShared = (result == DialogResult.Yes);
                 Playlist newPlaylist = new Playlist(playlistName, "Unknown Artist", "Unknown Genre", TimeSpan.Zero, "Unknown Path")
                 {
