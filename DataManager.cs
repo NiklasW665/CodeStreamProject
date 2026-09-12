@@ -50,41 +50,63 @@ namespace CodeStream20
                 throw; // Rethrow the exception for now
             }
             return Path.Combine(folderPath, $"{playlistName}.json");
-        }
+        } // this function only returns the path to the playlist file, not the folder. If you want to get the folder path, you can modify it to return just the folder without appending the playlist name and ".json".
+        public static string GetPlaylistFilePath(string baseFolder, Playlist playlist)
+        {
+            string folderPath = GetPlaylistFolder(playlist.Owner, baseFolder, playlist.IsShared);
+            return Path.Combine(folderPath, $"{playlist.Title}.json");
+        }//this function return the excat.json file path
 
         //save a playlist to the correct folder structure
-        public static void savePlaylist(Playlist playlist)
+        public static void savePlaylist(string basePlaylist, Playlist playlist)
         {
-            string folder = GetPlaylistFolder(playlist.Owner, playlist.Title, playlist.IsShared);
-            string path = Path.Combine(folder, $"{playlist.Title}.json");
+            string path = GetPlaylistFilePath(basePlaylist, playlist);
             string json = JsonSerializer.Serialize(playlist);// Serialize the playlist to JSON
+            string folder = GetPlaylistFolder(playlist.Owner, playlist.Title, playlist.IsShared);
+            
             File.WriteAllText(path, json);// Save the playlist to the file
+        }
+
+        public static void deletePlaylist(string folder, Playlist playlist)
+        {
+            string path = Path.Combine(folder, playlist.Title + ".json");
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            for (int i = 0; i < IconExtensions.Length; i++)
+            {
+                string iconPath = Path.Combine(folder, playlist.Title + IconExtensions[i]);
+                if (File.Exists(iconPath))
+                {
+                    File.Delete(iconPath);
+                }
+            }
         }
 
         //load a playlist from the correct folder structure
         public static List<Playlist> loadUserPlaylists(string username, bool isShared)
         {
-            string folder = isShared ? "Playlists/Shared" : $"Playlists/{username}";
+            
+            string ownFolder = GetPlaylistFolder(username, basePlaylist, false)
             List<Playlist> playlists = new List<Playlist>();
-            string ownFolder = GetPlaylistFolder(username, folder, isShared);
-            string sharedFolder = GetPlaylistFolder(username, folder, isShared);
+            string sharedFolder = GetPlaylistFolder(username, basePlaylist, isShared);
             
             loadPlaylistsFromFolder(ownFolder, playlists);
             loadPlaylistsFromFolder(sharedFolder, playlists); 
-            
+            UserPlaylists = playlists;
             return playlists;
         }
-
-        public static void deletePlaylist(string folder, Playlist playlist)
-        {
-            string nfolder = GetPlaylistFolder(playlist.Owner, folder, playlist.IsShared);
-            string path = Path.Combine(folder, playlist.Title + ".json");
-            if(File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
         public static void loadPlaylistsFromFolder(string folderPath, List<Playlist> playlists)
+        {
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            string[] files = Directory.GetFiles(folderPath, "*.json");
+            foreach (string file in files)
         {
             try
             {
@@ -94,12 +116,15 @@ namespace CodeStream20
                     foreach (string file in files)
                     {
                         string json = File.ReadAllText(file);
-                        Playlist playlist = JsonSerializer.Deserialize<Playlist>(json);
+                    Playlist? playlist = JsonSerializer.Deserialize<Playlist>(json);
                         if (playlist != null)
                         {
                             playlists.Add(playlist);
                         }
                     }
+                catch (Exception)
+                {
+                    return;
                 }
             }
             catch (Exception ex) 
