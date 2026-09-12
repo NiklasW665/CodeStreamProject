@@ -44,6 +44,8 @@
             btnDeleteSong = new Button();
             cmbSort = new ComboBox();
             btnSort = new Button();
+            lblTrackCountCaption = new Label();
+            lblTrackCountValue = new Label();
             ((System.ComponentModel.ISupportInitialize)pBoxCoverArt).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvSongs).BeginInit();
             ((System.ComponentModel.ISupportInitialize)axWindowsMediaPlayer1).BeginInit();
@@ -53,9 +55,9 @@
             // 
             lblPlaylistTitle.AutoSize = true;
             lblPlaylistTitle.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPlaylistTitle.Location = new Point(59, 20);
+            lblPlaylistTitle.Location = new Point(67, 27);
             lblPlaylistTitle.Name = "lblPlaylistTitle";
-            lblPlaylistTitle.Size = new Size(132, 30);
+            lblPlaylistTitle.Size = new Size(176, 37);
             lblPlaylistTitle.TabIndex = 0;
             lblPlaylistTitle.Text = "Playlist Title";
             lblPlaylistTitle.Click += lblPlaylistTitle_Click;
@@ -64,9 +66,9 @@
             // 
             lblCreationDate.AutoSize = true;
             lblCreationDate.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCreationDate.Location = new Point(59, 361);
+            lblCreationDate.Location = new Point(67, 481);
             lblCreationDate.Name = "lblCreationDate";
-            lblCreationDate.Size = new Size(115, 21);
+            lblCreationDate.Size = new Size(143, 28);
             lblCreationDate.TabIndex = 2;
             lblCreationDate.Text = "Creation Date";
             // 
@@ -74,18 +76,19 @@
             // 
             lblCreationDateValue.AutoSize = true;
             lblCreationDateValue.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblCreationDateValue.Location = new Point(80, 382);
+            lblCreationDateValue.Location = new Point(91, 509);
             lblCreationDateValue.Name = "lblCreationDateValue";
-            lblCreationDateValue.Size = new Size(64, 21);
+            lblCreationDateValue.Size = new Size(84, 28);
             lblCreationDateValue.TabIndex = 3;
             lblCreationDateValue.Text = "---------";
             lblCreationDateValue.Click += lblCreationDateValue_Click;
             // 
             // pBoxCoverArt
             // 
-            pBoxCoverArt.Location = new Point(25, 63);
+            pBoxCoverArt.Location = new Point(29, 84);
+            pBoxCoverArt.Margin = new Padding(3, 4, 3, 4);
             pBoxCoverArt.Name = "pBoxCoverArt";
-            pBoxCoverArt.Size = new Size(200, 200);
+            pBoxCoverArt.Size = new Size(229, 267);
             pBoxCoverArt.SizeMode = PictureBoxSizeMode.Zoom;
             pBoxCoverArt.TabIndex = 4;
             pBoxCoverArt.TabStop = false;
@@ -93,9 +96,10 @@
             // btnUploadPlaylistArt
             // 
             btnUploadPlaylistArt.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnUploadPlaylistArt.Location = new Point(45, 269);
+            btnUploadPlaylistArt.Location = new Point(51, 359);
+            btnUploadPlaylistArt.Margin = new Padding(3, 4, 3, 4);
             btnUploadPlaylistArt.Name = "btnUploadPlaylistArt";
-            btnUploadPlaylistArt.Size = new Size(166, 39);
+            btnUploadPlaylistArt.Size = new Size(190, 52);
             btnUploadPlaylistArt.TabIndex = 5;
             btnUploadPlaylistArt.Text = "Upload Playlist Art";
             btnUploadPlaylistArt.UseVisualStyleBackColor = true;
@@ -103,10 +107,9 @@
             // 
             // btnBackToHome
             // 
-            btnBackToHome.Location = new Point(655, 382);
-            btnBackToHome.Margin = new Padding(3, 2, 3, 2);
+            btnBackToHome.Location = new Point(749, 509);
             btnBackToHome.Name = "btnBackToHome";
-            btnBackToHome.Size = new Size(109, 32);
+            btnBackToHome.Size = new Size(125, 43);
             btnBackToHome.TabIndex = 6;
             btnBackToHome.Text = "<-Homepage";
             btnBackToHome.UseVisualStyleBackColor = true;
@@ -118,37 +121,44 @@
             dgvSongs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvSongs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvSongs.Columns.AddRange(new DataGridViewColumn[] { colName, colArtist, colAlbum, colGenre });
-            dgvSongs.Location = new Point(321, 34);
+            dgvSongs.Location = new Point(367, 45);
+            dgvSongs.Margin = new Padding(3, 4, 3, 4);
             dgvSongs.Name = "dgvSongs";
             dgvSongs.RowHeadersVisible = false;
-            dgvSongs.Size = new Size(443, 118);
+            dgvSongs.RowHeadersWidth = 51;
+            dgvSongs.Size = new Size(506, 157);
             dgvSongs.TabIndex = 7;
             dgvSongs.CellDoubleClick += dgvSongs_CellDoubleClick;
             // 
             // colName
             // 
             colName.HeaderText = "Name";
+            colName.MinimumWidth = 6;
             colName.Name = "colName";
             // 
             // colArtist
             // 
             colArtist.HeaderText = "Artist";
+            colArtist.MinimumWidth = 6;
             colArtist.Name = "colArtist";
             // 
             // colAlbum
             // 
             colAlbum.HeaderText = "Album";
+            colAlbum.MinimumWidth = 6;
             colAlbum.Name = "colAlbum";
             // 
             // colGenre
             // 
             colGenre.HeaderText = "Genre";
+            colGenre.MinimumWidth = 6;
             colGenre.Name = "colGenre";
             // 
             // axWindowsMediaPlayer1
             // 
             axWindowsMediaPlayer1.Enabled = true;
-            axWindowsMediaPlayer1.Location = new Point(321, 310);
+            axWindowsMediaPlayer1.Location = new Point(389, 322);
+            axWindowsMediaPlayer1.Margin = new Padding(3, 4, 3, 4);
             axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
             axWindowsMediaPlayer1.OcxState = (AxHost.State)resources.GetObject("axWindowsMediaPlayer1.OcxState");
             axWindowsMediaPlayer1.Size = new Size(443, 47);
@@ -156,9 +166,10 @@
             // 
             // btnDeleteSong
             // 
-            btnDeleteSong.Location = new Point(321, 177);
+            btnDeleteSong.Location = new Point(367, 227);
+            btnDeleteSong.Margin = new Padding(3, 4, 3, 4);
             btnDeleteSong.Name = "btnDeleteSong";
-            btnDeleteSong.Size = new Size(78, 35);
+            btnDeleteSong.Size = new Size(121, 47);
             btnDeleteSong.TabIndex = 9;
             btnDeleteSong.Text = "Delete Song";
             btnDeleteSong.UseVisualStyleBackColor = true;
@@ -168,26 +179,50 @@
             // 
             cmbSort.FormattingEnabled = true;
             cmbSort.Items.AddRange(new object[] { "", "Name", "Artist", "Album", "Genre" });
-            cmbSort.Location = new Point(654, 218);
+            cmbSort.Location = new Point(747, 270);
+            cmbSort.Margin = new Padding(3, 4, 3, 4);
             cmbSort.Name = "cmbSort";
-            cmbSort.Size = new Size(110, 23);
+            cmbSort.Size = new Size(125, 28);
             cmbSort.TabIndex = 10;
             // 
             // btnSort
             // 
-            btnSort.Location = new Point(654, 177);
+            btnSort.Location = new Point(747, 215);
+            btnSort.Margin = new Padding(3, 4, 3, 4);
             btnSort.Name = "btnSort";
-            btnSort.Size = new Size(110, 35);
+            btnSort.Size = new Size(126, 47);
             btnSort.TabIndex = 11;
             btnSort.Text = "Sort By:";
             btnSort.UseVisualStyleBackColor = true;
             btnSort.Click += btnSort_Click;
             // 
+            // lblTrackCountCaption
+            // 
+            lblTrackCountCaption.AutoSize = true;
+            lblTrackCountCaption.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTrackCountCaption.Location = new Point(228, 481);
+            lblTrackCountCaption.Name = "lblTrackCountCaption";
+            lblTrackCountCaption.Size = new Size(124, 28);
+            lblTrackCountCaption.TabIndex = 13;
+            lblTrackCountCaption.Text = "Track Count";
+            // 
+            // lblTrackCountValue
+            // 
+            lblTrackCountValue.AutoSize = true;
+            lblTrackCountValue.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTrackCountValue.Location = new Point(243, 513);
+            lblTrackCountValue.Name = "lblTrackCountValue";
+            lblTrackCountValue.Size = new Size(84, 28);
+            lblTrackCountValue.TabIndex = 14;
+            lblTrackCountValue.Text = "---------";
+            // 
             // frmPlaylist
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(914, 600);
+            Controls.Add(lblTrackCountValue);
+            Controls.Add(lblTrackCountCaption);
             Controls.Add(btnSort);
             Controls.Add(cmbSort);
             Controls.Add(btnDeleteSong);
@@ -199,6 +234,7 @@
             Controls.Add(lblCreationDateValue);
             Controls.Add(lblCreationDate);
             Controls.Add(lblPlaylistTitle);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "frmPlaylist";
             Text = "Playlist";
             Load += frmPlaylist_Load;
@@ -226,5 +262,7 @@
         private Button btnDeleteSong;
         private ComboBox cmbSort;
         private Button btnSort;
+        private Label lblTrackCountCaption;
+        private Label lblTrackCountValue;
     }
 }

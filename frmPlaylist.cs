@@ -40,6 +40,10 @@ namespace CodeStream20
         {
 
         }
+        private void UpdateTrackCount()
+        {
+            lblTrackCountValue.Text = songs.Count.ToString();
+        }
 
         private void lblCreationDateValue_Click(object sender, EventArgs e)
         {
@@ -129,6 +133,7 @@ namespace CodeStream20
                         song.Genre
                     );
                 }
+                UpdateTrackCount();
             }
             catch (Exception ex)
             {
