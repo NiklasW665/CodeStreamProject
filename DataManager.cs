@@ -34,9 +34,27 @@ namespace CodeStream20
         //playlslist/shared/playlistname.json or playlist/username/playlistname.json
         //playlist objects (playlist + list<song>) serialized to json
         //create the correct folder structure for the playlists and shared playlists
+        public static string GetPlaylistRootFolder()
+        {
+            string rootFolder = "Playlists";
+            try
+            {
+                if (!Directory.Exists(rootFolder))
+                {
+                    Directory.CreateDirectory(rootFolder);
+                }
+            }
+            catch (Exception)
+            {
+                // Handle the exception (e.g., log it, show a message to the user, etc.)
+                throw; // Rethrow the exception for now
+            }
+            return rootFolder;
+        }
         public static string GetPlaylistFolder(string username, bool isShared)
         {
-            string folderPath = isShared ? "Playlists/Shared" : $"Playlists/{username}";
+            string folderPath = isShared ? 
+                Path.Combine(GetPlaylistRootFolder(), "Shared") : Path.Combine(GetPlaylistRootFolder(), username);
             //Directory.CreateDirectory(folderPath); // Ensure the directory exists
             try
             {
@@ -68,35 +86,36 @@ namespace CodeStream20
 
         public static void deletePlaylist(Playlist playlist)
         {
-            string folder = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
-            string path = Path.Combine(folder, playlist.Title + ".json");
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-
-            for (int i = 0; i < IconExtensions.Length; i++)
-            {
-                string iconPath = Path.Combine(folder, playlist.Title + IconExtensions[i]);
-                if (File.Exists(iconPath))
-                {
-                    File.Delete(iconPath);
-                }
+            
             try
+            {
+                string folder = GetPlaylistFolder(playlist.Owner, playlist.IsShared);
+                string path = Path.Combine(folder, playlist.Title + ".json");
+                if (File.Exists(path))
                 {
+                    File.Delete(path);
+                }
+
+                for (int i = 0; i < IconExtensions.Length; i++)
+                {
+                    string iconPath = Path.Combine(folder, playlist.Title + IconExtensions[i]);
+                    if (File.Exists(iconPath))
+                    {
+                        File.Delete(iconPath);
+                    }
                     if (File.Exists(path)) File.Delete(path);
                     foreach (var ext in IconExtensions)
                     {
-                       
+
                         if (File.Exists(iconPath)) File.Delete(iconPath);
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Failed to delete playlist: {ex.Message}");
-                }
-
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to delete playlist: {ex.Message}");
+                throw;
+            }  
         }
 
         //load a playlist from the correct folder structure
@@ -161,9 +180,17 @@ namespace CodeStream20
             string extension = Path.GetExtension(iconFilePath);
             if (Array.Exists(IconExtensions, ext => ext.Equals(extension, StringComparison.OrdinalIgnoreCase)))
             {
-                string destinationPath = Path.Combine(folderPath, playlist.Title + extension);
-                File.Copy(iconFilePath, destinationPath, true); // Overwrite if exists
+                foreach (var ext in IconExtensions)
+                {
+                    string oldPath = Path.Combine(folderPath, playlist.Title + ext);
+                    if (File.Exists(oldPath))
+                    {
+                        File.Delete(oldPath);
+                    }
+                }
             }
+            string destinationPath = Path.Combine(folderPath, playlist.Title + extension);
+            File.Copy(iconFilePath, destinationPath, true); // Overwrite if exists
         }
     }
 }

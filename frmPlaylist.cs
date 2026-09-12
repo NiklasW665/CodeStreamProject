@@ -14,7 +14,7 @@ namespace CodeStream20
         private List<Song> songs = new List<Song>();
         public string? SelectedPlaylist { get; }
         public string PlaylistPath { get; } = string.Empty;
-        private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
+        //private string playlistIconFolder = Path.Combine(Application.StartupPath, "PlaylistIcon");
         //Puts the PlayListIcon folder in the application startup path
         private Playlist? currentPlaylist;
         public frmPlaylist()
@@ -60,6 +60,7 @@ namespace CodeStream20
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
+                    pBoxCoverArt.Image = Image.FromFile(openFileDialog.FileName);
                     pBoxCoverArt.Image = Image.FromFile(openFileDialog.FileName);
                     if (currentPlaylist != null)
                     {
@@ -207,6 +208,7 @@ namespace CodeStream20
             btnSort.BackColor = ColorTranslator.FromHtml("#1f1fa1");
             btnSort.ForeColor = Color.White;
 
+<<<<<<< HEAD
             //DataGridView
             // Make sure song grid text is always readable, regardless of the form's dark theme
             dgvSongs.DefaultCellStyle.BackColor = Color.White;
@@ -218,13 +220,28 @@ namespace CodeStream20
             {
                 string? iconPath = DataManager.GetPlaylistIconPath(currentPlaylist);
                 if (iconPath != null)
+=======
+            // Load playlist artwork
+            if(currentPlaylist != null)
+            {
+                string? iconPath = DataManager.GetPlaylistIconPath(currentPlaylist);
+                if(iconPath != null)
+>>>>>>> 806224d162fdcdd0ff8470acb40c07ad7ece7c22
                 {
                     pBoxCoverArt.Image = Image.FromFile(iconPath);
                 }
             }
 
             // Sets the creation date of the playlist to the date the file was created
+<<<<<<< HEAD
             if (currentPlaylist != null)
+=======
+            if(currentPlaylist != null)
+            {
+                lblCreationDate.Text = currentPlaylist.CreatedDate.ToString("dd MMMM yyyy");
+            } else
+            if (File.Exists(PlaylistPath))
+>>>>>>> 806224d162fdcdd0ff8470acb40c07ad7ece7c22
             {
                 string playlistFilePath = DataManager.GetPlaylistFilePath(currentPlaylist);
                 if (File.Exists(playlistFilePath))

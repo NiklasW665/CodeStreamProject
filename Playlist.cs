@@ -26,6 +26,7 @@ namespace CodeStream20
 
         // True if the playlist is shared
         public bool IsShared { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         //constructor to easily insantiate a new playlist object
         public Playlist(string title, string artist, string genre, TimeSpan duration, string filePath)
